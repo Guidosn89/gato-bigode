@@ -7,18 +7,18 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#2a3246">
-<title>Academia dos Brothers</title>
+<title>Academia dos Marombas</title>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
-<title>Academia dos Brothers</title>
+<title>Academia dos Marombas</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
 /* Layout: gym floor. Header with mood + mic meter, chips to pick one athlete or the whole crew, stage with mat band, action grid */
 :root{
-  --bg:#1c2130; --wall:#2a3246; --wall2:#1f2636; --mat:#3b4252; --mat2:#4b5468; --fg:#f2f4f8; --accent:#ff6a2b;
-  --panel:#2f3850; --panel2:#3a4460; --shadow:rgba(0,0,0,.45); --neon:#39d98a;
-  --display:'Baloo 2','Comic Sans MS',cursive; --body:'Nunito',system-ui,sans-serif;
+  --bg:#0b2a5c; --wall:#113a7a; --wall2:#0a2250; --mat:#0e1e3d; --mat2:#1a3566; --fg:#ffffff; --accent:#e5262b;
+  --panel:#15408a; --panel2:#1d4f9f; --shadow:rgba(0,10,40,.55); --neon:#e5262b; --sky:#ffffff; --light:#bfe3ff;
+  --display:'Titillium Web','Arial Narrow',sans-serif; --body:'Titillium Web',system-ui,sans-serif;
   color-scheme:dark;
 }
 html{height:100%;box-sizing:border-box}
@@ -27,26 +27,30 @@ body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:var(-
 #app{height:100%;display:flex;flex-direction:column;gap:6px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px 10px;box-sizing:border-box;
   background:linear-gradient(var(--wall) 0 58%,var(--wall2) 58% 100%)}
+#neon{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+#neon svg{width:100%;height:100%}
 header{display:flex;flex-direction:column;gap:4px}
-#hrow{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--display);font-size:1.3rem;font-weight:800}
-#hrow b{color:var(--neon)}
-#mood{font-size:.78rem;font-weight:700;background:var(--panel);padding:4px 12px;border-radius:999px;box-shadow:0 2px 0 var(--shadow);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#hrow{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--display);font-size:1.45rem;font-weight:900;letter-spacing:-.02em;text-transform:uppercase;font-style:italic}
+#hrow b{color:var(--accent)}
+#hrow small{display:block;font-size:.62rem;font-weight:700;font-style:normal;letter-spacing:.14em;color:var(--light);line-height:1;margin-top:-2px}
+#mood{font-size:.78rem;font-weight:700;font-style:italic;background:var(--panel);padding:4px 12px;border-radius:999px;box-shadow:0 2px 0 var(--shadow);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #chars{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}#chars::-webkit-scrollbar{display:none}
-.chip{flex:0 0 auto;border:0;border-radius:999px;background:var(--panel);color:var(--fg);font-family:var(--display);font-weight:800;font-size:.82rem;padding:5px 12px;box-shadow:0 2px 0 var(--shadow);cursor:pointer}
+.chip{flex:0 0 auto;border:0;border-radius:6px;background:var(--panel);color:var(--fg);font-family:var(--display);font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.02em;font-size:.8rem;padding:5px 12px;box-shadow:0 2px 0 var(--shadow);cursor:pointer}
 .chip.on{background:var(--accent);color:#fff}
 .chip:focus-visible{outline:3px solid var(--neon)}
 #meter{height:5px;border-radius:3px;background:var(--panel);overflow:hidden;opacity:0;transition:opacity .2s}
 #meter.on{opacity:1}
 #meter i{display:block;height:100%;width:100%;background:var(--neon);transform-origin:0 50%;transform:scaleX(0);transition:transform .06s linear}
 #stage{flex:1;min-height:0;position:relative;display:flex;align-items:flex-end;justify-content:center;touch-action:none;
-  background:repeating-linear-gradient(90deg,transparent 0 38px,rgba(255,255,255,.03) 38px 40px)}
-#mat{position:absolute;left:-16px;right:-16px;bottom:0;height:34px;background:linear-gradient(var(--mat2),var(--mat));box-shadow:0 -4px 12px var(--shadow);z-index:2;pointer-events:none}
-#mat::before{content:"";position:absolute;left:0;right:0;top:10px;height:3px;background:var(--neon);opacity:.5}
+  background:radial-gradient(ellipse at 50% 0%,rgba(191,227,255,.18),transparent 55%),repeating-linear-gradient(90deg,transparent 0 46px,rgba(255,255,255,.035) 46px 48px)}
+#mat{position:absolute;left:-16px;right:-16px;bottom:0;height:36px;background:linear-gradient(var(--mat2),var(--mat));box-shadow:0 -4px 14px var(--shadow);z-index:2;pointer-events:none}
+#mat::before{content:"";position:absolute;left:0;right:0;top:9px;height:3px;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+#mat::after{content:"";position:absolute;left:0;right:0;top:20px;height:2px;background:var(--light);opacity:.5}
 #rack{position:absolute;left:0;bottom:30px;font-size:2.2rem;line-height:1;opacity:.9;pointer-events:none;z-index:1}
-#bubble{position:absolute;top:3%;left:50%;transform:translateX(-50%);background:var(--panel2);padding:7px 14px;border-radius:16px;z-index:5;max-width:94%;
-  font-family:var(--display);font-weight:800;font-size:1.1rem;box-shadow:0 3px 0 var(--shadow);opacity:0;transition:opacity .2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bubble{position:absolute;top:3%;left:50%;transform:translateX(-50%);background:var(--sky);color:var(--bg);padding:7px 14px;border-radius:8px;z-index:5;max-width:94%;
+  font-family:var(--display);font-weight:900;font-style:italic;font-size:1.1rem;box-shadow:0 3px 0 var(--shadow);opacity:0;transition:opacity .2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #bubble.on{opacity:1}
-#bubble::after{content:"";position:absolute;left:50%;bottom:-8px;border:8px solid transparent;border-top-color:var(--panel2);border-bottom:0;transform:translateX(-50%)}
+#bubble::after{content:"";position:absolute;left:50%;bottom:-8px;border:8px solid transparent;border-top-color:var(--sky);border-bottom:0;transform:translateX(-50%)}
 #fx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:4}
 .fx{position:absolute;font-size:2rem;animation:fly 1.1s ease-out forwards}
 .fx.slow{animation-duration:2.2s}
@@ -59,11 +63,11 @@ header{display:flex;flex-direction:column;gap:4px}
 #row.crew .actor .tag{bottom:-10px}
 .actor{position:relative;display:flex;flex-direction:column;align-items:center;max-height:100%}
 .actor svg{width:100%;height:auto;max-height:min(60vh,440px);touch-action:none;cursor:pointer;filter:drop-shadow(0 8px 6px var(--shadow))}
-.actor .tag{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);background:var(--panel2);color:var(--fg);font-family:var(--display);font-weight:800;font-size:.72rem;padding:2px 9px;border-radius:999px;white-space:nowrap;z-index:3;box-shadow:0 2px 0 var(--shadow)}
+.actor .tag{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-family:var(--display);font-weight:900;font-style:italic;text-transform:uppercase;font-size:.7rem;padding:2px 9px;border-radius:4px;white-space:nowrap;z-index:3;box-shadow:0 2px 0 var(--shadow)}
 #row.solo .tag{display:none}
 .bar{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
 #bar-crew{grid-template-columns:repeat(4,1fr)}
-.bar button,.pill{border:0;border-radius:14px;background:var(--panel);color:var(--fg);font-family:var(--display);font-weight:800;
+.bar button,.pill{border:0;border-radius:8px;background:var(--panel);color:var(--fg);font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:.02em;
   font-size:clamp(.6rem,2.5vw,.85rem);padding:6px 2px;box-shadow:0 4px 0 var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;line-height:1.15}
 .bar button{cursor:pointer}
 .bar button span{font-size:clamp(1.2rem,5.5vw,1.6rem)}
@@ -117,15 +121,20 @@ svg.dizzy .head{animation:wobble .45s ease-in-out infinite}
 svg.shy .head{animation:tilt .5s ease-in-out infinite alternate}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}}
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&family=Nunito:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,600;0,700;0,900;1,900&display=swap">
 <audio id="silent" loop playsinline preload="auto" src="data:audio/wav;base64,UklGRsQPAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YaAPAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA"></audio>
 <div id="app">
 <header>
-  <div id="hrow"><div id="title-name">Academia dos <b>Brothers</b></div><div id="mood">toque em alguém!</div></div>
+  <div id="hrow"><div id="title-name">Sky<b>Fit</b> <small>ACADEMIA DOS MAROMBAS</small></div><div id="mood">toque em alguém!</div></div>
   <div id="chars"><button class="chip on" data-char="crew">💪 Turma</button><button class="chip" data-char="ale">Ale</button><button class="chip" data-char="guido">Guido</button><button class="chip" data-char="regis">Régis</button><button class="chip" data-char="jacinto">Jacinto</button></div>
   <div id="meter"><i></i></div>
 </header>
 <div id="stage">
+  <div id="neon"><svg viewBox="0 0 560 430" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg"><defs><filter id="glow"><feGaussianBlur stdDeviation="2.2"/></filter></defs>
+    <g fill="none" stroke="#bfe3ff" stroke-width="3" stroke-linejoin="round" opacity=".95"><g filter="url(#glow)" stroke-width="5" opacity=".6"><path d="M155 38 l35 -20 l35 20 l0 40 l-35 20 l-35 -20 Z"/><path d="M245 24 l35 -20 l35 20 l0 40 l-35 20 l-35 -20 Z"/><path d="M335 38 l35 -20 l35 20 l0 40 l-35 20 l-35 -20 Z"/></g>
+    <path d="M155 38 l35 -20 l35 20 l0 40 l-35 20 l-35 -20 Z"/><path d="M245 24 l35 -20 l35 20 l0 40 l-35 20 l-35 -20 Z"/><path d="M335 38 l35 -20 l35 20 l0 40 l-35 20 l-35 -20 Z"/></g>
+    <g stroke="#e5262b" stroke-width="2.5" opacity=".85"><path d="M40 160 l50 120"/><path d="M520 160 l-50 120"/><path d="M20 200 l34 80"/><path d="M540 200 l-34 80"/></g>
+    <g stroke="#bfe3ff" stroke-width="1.5" opacity=".35"><path d="M60 140 l40 140"/><path d="M500 140 l-40 140"/></g></svg></div>
   <div id="bubble"></div>
   <div id="fx"></div>
   <div id="item"></div>
@@ -233,7 +242,7 @@ function say(actor,txt,ms,spoken){ const t=(actor&&mode==='crew'?actor.name+': '
 
 /* ================= characters ================= */
 const CHARS={
-  ale:{name:'Ale',title:'Ale 💪',hello:'E aí, brother! 👊',pitch:.7,srate:1,rate:.85,bark:.9,beard:true,mood:'toque no Ale!',fullname:'Alessandro, o Barba!'},
+  ale:{name:'Ale',title:'Ale 💪',hello:'E aí, brother! 👊',pitch:.7,srate:1,rate:.85,bark:.9,beard:true,mood:'toque no Ale!',fullname:'Ale, o Barba!'},
   guido:{name:'Guido',title:'Guido 💪',hello:'Bora treinar! 👊',pitch:.95,srate:1,rate:1,bark:1.1,mood:'toque no Guido!',fullname:'Guido, pai do Gabriel!'},
   regis:{name:'Régis',title:'Régis 💪',hello:'Salve, salve! 🤙',pitch:.85,srate:1.05,rate:.95,bark:1,cap:true,glasses:true,mood:'toque no Régis!',fullname:'Régis, o do boné!'},
   jacinto:{name:'Jacinto',title:'Jacinto 💪',hello:'Vem carvão! 🔥',pitch:.45,srate:.92,rate:.75,bark:.75,beard:true,glasses:true,mood:'toque no Jacinto!',fullname:'Jacinto Leite Aquino Rego!'}
@@ -286,7 +295,7 @@ let cur=null,curKey='crew';
 function setMode(k){ if(k!=='crew'&&!(CHARS[k]&&SP[k]))k='crew'; curKey=k; mode=k==='crew'?'crew':'solo'; row.innerHTML=''; row.className=mode;
   const keys=mode==='crew'?ORDER:[k]; keys.forEach(function(kk){ const a=actors[kk]; if(!SP[kk])return; clearTimeout(a.timer); a.busy=false; a.set(a.rest()); row.appendChild(a.el); });
   cur=mode==='solo'?actors[k]:null; barSolo.hidden=mode!=='solo'; barCrew.hidden=mode!=='crew';
-  $('title-name').innerHTML=mode==='crew'?'Academia dos <b>Brothers</b>':CHARS[k].title; mood.textContent=mode==='crew'?'toque em alguém!':CHARS[k].mood;
+  $('title-name').innerHTML=mode==='crew'?'Sky<b>Fit</b> <small>ACADEMIA DOS MAROMBAS</small>':'Sky<b>Fit</b> <small>'+CHARS[k].name.toUpperCase()+'</small>'; mood.textContent=mode==='crew'?'toque em alguém!':CHARS[k].mood;
   const chips=document.querySelectorAll('#chars .chip'); for(let i=0;i<chips.length;i++){ const on=chips[i].getAttribute('data-char')===k; chips[i].classList.toggle('on',on); if(on){ try{ chips[i].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}); }catch(e){} } }
   try{ localStorage.setItem('ac-char',k); }catch(e){} }
 (function(){ const chips=document.querySelectorAll('#chars .chip'); for(let i=0;i<chips.length;i++){ const k=chips[i].getAttribute('data-char'); if(k!=='crew'&&!SP[k])chips[i].hidden=true; }
@@ -328,7 +337,7 @@ $('c-run').onclick=function(){ audio(); if(!crewFree())return; wakeAll(); crewBu
   ORDER.forEach(function(k){ actors[k].state('run',3400); }); const first=ORDER[Math.floor(Math.random()*ORDER.length)];
   setTimeout(function(){ const w=actors[first]; say(w,w.name+' chegou primeiro! 🏁',2000,w.name+' chegou primeiro!'); snd.crowd(); w.fx('🏁',3); w.state('cheer',1800); ORDER.forEach(function(k){ if(k!==first){ actors[k].fx('💦',2); actors[k].state('sleep',1800); } }); },3400);
   setTimeout(function(){ crewBusy=false; mood.textContent='toque em alguém!'; },5400); };
-$('c-shout').onclick=function(){ audio(); if(!crewFree())return; wakeAll(); crewBusy=true; mood.textContent='grito de guerra'; say(null,'BROTHERS! 📣',1800,'Um, dois, três... Brothers!'); snd.crowd();
+$('c-shout').onclick=function(){ audio(); if(!crewFree())return; wakeAll(); crewBusy=true; mood.textContent='grito de guerra'; say(null,'MAROMBAS! 📣',1800,'Um, dois, três... Marombas!'); snd.crowd();
   ORDER.forEach(function(k,i){ setTimeout(function(){ actors[k].state('cheer',1600); actors[k].fx('🔥',1); },i*120); }); setTimeout(function(){ crewBusy=false; mood.textContent='toque em alguém!'; },2400); };
 
 /* ================= microphone ================= */
