@@ -88,7 +88,8 @@ header{display:flex;flex-direction:column;gap:4px}
 #ears{transition:transform .2s}
 .eye-lid{transform-origin:50% 0;transform:scaleY(0);transition:transform .12s}
 #cat.blink .eye-lid,#cat.happy .eye-lid,#cat.sleep .eye-lid,#cat.yawn .eye-lid,#cat.shake .eye-lid,#cat.dizzy .eye-lid,#cat.milk .eye-lid{transform:scaleY(1)}
-#mouth-smile,#mouth-open,#mouth-flat,#mouth-ooh,#eyes-x,#stache,#blush{display:none}
+#mouth-smile,#mouth-open,#mouth-flat,#mouth-ooh,#eyes-x,#stache,#blush,#paci{display:none}
+#cat.idle #paci,#cat.happy #paci,#cat.sleep #paci,#cat.dance #paci,#cat.shy #paci,#cat.shake #paci{display:block}
 #cat.idle #mouth-smile,#cat.happy #mouth-smile,#cat.dance #mouth-smile,#cat.shy #mouth-smile,#cat.shake #mouth-smile{display:block}
 #cat.laugh #mouth-open,#cat.eat #mouth-open,#cat.yawn #mouth-open,#cat.air #mouth-open,#cat.milk #mouth-open{display:block}
 #cat.sleep #mouth-flat{display:block}
@@ -152,7 +153,7 @@ header{display:flex;flex-direction:column;gap:4px}
 <div id="app">
 <header>
   <div id="hrow"><div id="title-name">Bigode 🐱</div><div id="mood">toque no gato!</div></div>
-  <div id="chars"><button class="chip on" data-char="cat">🐱 Bigode</button><button class="chip" data-char="dad">Papai</button><button class="chip" data-char="mom">Mamãe</button><button class="chip" data-char="kid">Filhote</button><button class="chip" data-char="tio">Tio</button><button class="chip" data-char="tia">Tia</button><button class="chip" data-char="bebe">Bebê</button><button class="chip" data-char="marrom">Marrom</button><button class="chip" data-char="caramelo">Caramelo</button></div>
+  <div id="chars"><button class="chip on" data-char="cat">🐱 Bigode</button><button class="chip" data-char="dad">Papai</button><button class="chip" data-char="mom">Mamãe</button><button class="chip" data-char="kid">Filhote</button><button class="chip" data-char="tio">Tio</button><button class="chip" data-char="tia">Tia</button><button class="chip" data-char="bebe">Bebê</button><button class="chip" data-char="marrom">Marrom</button><button class="chip" data-char="caramelo">Caramelo</button><button class="chip" data-char="sh-pai">🦈 Pai</button><button class="chip" data-char="sh-mae">🦈 Mãe</button><button class="chip" data-char="sh-vovo">🦈 Vovô</button><button class="chip" data-char="sh-vova">🦈 Vovó</button><button class="chip" data-char="sh-bebe">🦈 Bebê</button></div>
   <div id="meter"><i></i></div>
 </header>
 <div id="stage">
@@ -285,6 +286,38 @@ function human(o){ const H=[];
     +'<ellipse cx="86" cy="254" rx="15" ry="32" transform="rotate(18 86 254)" fill="'+o.shirt+'" data-part="paw"/><ellipse cx="214" cy="254" rx="15" ry="32" transform="rotate(-18 214 254)" fill="'+o.shirt+'" data-part="paw"/>'
     +'<circle cx="76" cy="284" r="11" fill="'+o.skin+'" data-part="paw"/><circle cx="224" cy="284" r="11" fill="'+o.skin+'" data-part="paw"/></g>';
   return back+body+'<g id="head" class="g" data-part="head">'+H.join('')+'</g>'; }
+function shark(o){ const R=o.r,cy=o.cy,c=o.col,d=o.dark,b=o.belly; const my=cy+R*.52; const H=[];
+  function n(v){ return (Math.round(v*10)/10).toString(); }
+  function seye(cx){ const ey=cy-R*.08,rx=R*.19,ry=R*.23; return '<g data-part="eye"><ellipse cx="'+n(cx)+'" cy="'+n(ey)+'" rx="'+n(rx)+'" ry="'+n(ry)+'" fill="#fff"/><circle cx="'+n(cx)+'" cy="'+n(ey+ry*.15)+'" r="'+n(rx*.6)+'" fill="#22304a"/><circle cx="'+n(cx+rx*.3)+'" cy="'+n(ey-ry*.2)+'" r="'+n(rx*.22)+'" fill="#fff"/>'+(o.lashes?'<path d="M'+n(cx+(cx<150?-1:1)*rx)+' '+n(ey-ry*.4)+' l'+n((cx<150?-1:1)*7)+' -6 M'+n(cx+(cx<150?-1:1)*rx*.9)+' '+n(ey-ry*.75)+' l'+n((cx<150?-1:1)*6)+' -7" stroke="#22304a" stroke-width="3" stroke-linecap="round"/>':'')+'<ellipse class="eye-lid" cx="'+n(cx)+'" cy="'+n(ey)+'" rx="'+n(rx+1)+'" ry="'+n(ry+1)+'" fill="'+c+'"/></g>'; }
+  const fx=150-R*.82, fy=cy+R*.78;
+  const body='<g id="body" class="g" data-part="belly">'
+    +'<path data-part="paw" d="M'+n(150-R*.42)+' 322 C '+n(150-R*.25)+' 300, '+n(150-R*.12)+' 296, 150 302 C '+n(150+R*.12)+' 296, '+n(150+R*.25)+' 300, '+n(150+R*.42)+' 322 C '+n(150+R*.2)+' 314, '+n(150+R*.08)+' 312, 150 316 C '+n(150-R*.08)+' 312, '+n(150-R*.2)+' 314, '+n(150-R*.42)+' 322 Z" fill="'+d+'"/>'
+    +'<ellipse cx="150" cy="'+n(cy+R*.95)+'" rx="'+n(R*.72)+'" ry="'+n(R*.62)+'" fill="'+c+'"/>'
+    +'<ellipse cx="150" cy="'+n(cy+R*1.02)+'" rx="'+n(R*.46)+'" ry="'+n(R*.46)+'" fill="'+b+'"/>'
+    +'<ellipse cx="'+n(fx)+'" cy="'+n(fy)+'" rx="'+n(R*.16)+'" ry="'+n(R*.34)+'" transform="rotate(32 '+n(fx)+' '+n(fy)+')" fill="'+c+'" data-part="paw"/>'
+    +'<ellipse cx="'+n(300-fx)+'" cy="'+n(fy)+'" rx="'+n(R*.16)+'" ry="'+n(R*.34)+'" transform="rotate(-32 '+n(300-fx)+' '+n(fy)+')" fill="'+c+'" data-part="paw"/>'
+    +(o.pearls?'<g fill="#fff" stroke="#d9d0c0" stroke-width="1">'+[-.36,-.24,-.12,0,.12,.24,.36].map(function(k){ return '<circle cx="'+n(150+R*k)+'" cy="'+n(cy+R*.9+Math.abs(k)*R*.1)+'" r="4"/>'; }).join('')+'</g>':'')
+    +'</g>';
+  H.push('<path data-part="fin" d="M150 '+n(cy-R-R*.34)+' L '+n(150-R*.24)+' '+n(cy-R+R*.1)+' L '+n(150+R*.28)+' '+n(cy-R+R*.06)+' Z" fill="'+d+'"/>');
+  if(o.curl) H.push('<path d="M'+n(150+R*.08)+' '+n(cy-R-R*.3)+' q10 -16 0 -26 q-10 -8 -18 2" stroke="'+d+'" stroke-width="5" fill="none" stroke-linecap="round"/>');
+  H.push('<circle cx="150" cy="'+n(cy)+'" r="'+n(R)+'" fill="'+c+'"/>');
+  H.push('<ellipse cx="150" cy="'+n(cy+R*.44)+'" rx="'+n(R*.62)+'" ry="'+n(R*.38)+'" fill="'+b+'"/>');
+  H.push('<g stroke="'+d+'" stroke-width="3" fill="none" stroke-linecap="round"><path d="M'+n(150-R*.84)+' '+n(cy)+' q-5 11 0 22"/><path d="M'+n(150-R*.72)+' '+n(cy+4)+' q-5 11 0 22"/><path d="M'+n(150+R*.84)+' '+n(cy)+' q5 11 0 22"/><path d="M'+n(150+R*.72)+' '+n(cy+4)+' q5 11 0 22"/></g>');
+  if(o.cap) H.push('<path d="M'+n(150-R*.7)+' '+n(cy-R*.58)+' q'+n(R*.7)+' -'+n(R*.62)+' '+n(R*1.4)+' 0 Z" fill="#23406b"/><rect x="'+n(150-R*.72)+'" y="'+n(cy-R*.66)+'" width="'+n(R*1.44)+'" height="11" rx="5" fill="#f4f1e8"/>');
+  if(o.bun) H.push('<circle cx="'+n(150+R*.5)+'" cy="'+n(cy-R*.8)+'" r="'+n(R*.2)+'" fill="#dcdcdc"/><circle cx="'+n(150+R*.5)+'" cy="'+n(cy-R*.8)+'" r="'+n(R*.09)+'" fill="#bdbdbd"/>');
+  if(o.flower){ const fx2=150-R*.62,fy2=cy-R*.72; H.push('<g fill="#ff7a8a">'+[0,72,144,216,288].map(function(a){ const r=a*Math.PI/180; return '<circle cx="'+n(fx2+Math.cos(r)*10)+'" cy="'+n(fy2+Math.sin(r)*10)+'" r="7"/>'; }).join('')+'</g><circle cx="'+n(fx2)+'" cy="'+n(fy2)+'" r="5" fill="#ffd166"/>'); }
+  H.push('<g id="blush" fill="#ff9aa8" opacity=".55"><ellipse cx="'+n(150-R*.62)+'" cy="'+n(cy+R*.3)+'" rx="'+n(R*.16)+'" ry="'+n(R*.09)+'"/><ellipse cx="'+n(150+R*.62)+'" cy="'+n(cy+R*.3)+'" rx="'+n(R*.16)+'" ry="'+n(R*.09)+'"/></g>');
+  if(o.brows) H.push('<g stroke="'+o.brows+'" stroke-width="'+(o.browW||6)+'" stroke-linecap="round" fill="none"><path d="M'+n(150-R*.58)+' '+n(cy-R*.4)+' q'+n(R*.2)+' -10 '+n(R*.36)+' -4"/><path d="M'+n(150+R*.58)+' '+n(cy-R*.4)+' q-'+n(R*.2)+' -10 -'+n(R*.36)+' -4"/></g>');
+  H.push(seye(150-R*.38)+seye(150+R*.38));
+  H.push('<g id="eyes-x" stroke="#22304a" stroke-width="5" stroke-linecap="round" fill="none"><path d="M'+n(150-R*.5)+' '+n(cy-R*.2)+' l'+n(R*.24)+' '+n(R*.24)+' M'+n(150-R*.26)+' '+n(cy-R*.2)+' l-'+n(R*.24)+' '+n(R*.24)+'"/><path d="M'+n(150+R*.26)+' '+n(cy-R*.2)+' l'+n(R*.24)+' '+n(R*.24)+' M'+n(150+R*.5)+' '+n(cy-R*.2)+' l-'+n(R*.24)+' '+n(R*.24)+'"/></g>');
+  H.push('<g id="nose" data-part="nose" fill="'+d+'"><circle cx="'+n(150-R*.07)+'" cy="'+n(cy+R*.26)+'" r="3"/><circle cx="'+n(150+R*.07)+'" cy="'+n(cy+R*.26)+'" r="3"/></g>');
+  H.push('<g id="mouth-smile"><path d="M'+n(150-R*.3)+' '+n(my)+' q'+n(R*.3)+' '+n(R*.22)+' '+n(R*.6)+' 0" stroke="#4a2a12" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M'+n(150-R*.2)+' '+n(my+R*.05)+' l4 8 l4 -7 Z M'+n(150+R*.12)+' '+n(my+R*.05)+' l4 7 l4 -8 Z" fill="#fff"/></g>');
+  H.push('<g id="mouth-open"><path d="M'+n(150-R*.32)+' '+n(my-2)+' q'+n(R*.32)+' '+n(R*.5)+' '+n(R*.64)+' 0 Z" fill="#8c2f3a"/><ellipse cx="150" cy="'+n(my+R*.16)+'" rx="'+n(R*.14)+'" ry="'+n(R*.08)+'" fill="#ff8fa3"/><path d="M'+n(150-R*.26)+' '+n(my-1)+' l4 7 l4 -7 l6 0 l4 7 l4 -7 l6 0 l4 7 l4 -7 l6 0 l4 7 l4 -7 Z" fill="#fff"/></g>');
+  H.push('<path id="mouth-flat" d="M'+n(150-R*.16)+' '+n(my+3)+' h'+n(R*.32)+'" stroke="#4a2a12" stroke-width="4" stroke-linecap="round"/>');
+  H.push('<ellipse id="mouth-ooh" cx="150" cy="'+n(my+5)+'" rx="'+n(R*.1)+'" ry="'+n(R*.13)+'" fill="#8c2f3a"/>');
+  H.push('<path id="stache" d="M'+n(150-R*.22)+' '+n(my-6)+' q'+n(R*.22)+' -12 '+n(R*.44)+' 0 q-'+n(R*.22)+' 7 -'+n(R*.44)+' 0 Z" fill="#fff" stroke="#e8e0d0" stroke-width="1"/>');
+  if(o.paci) H.push('<g id="paci"><ellipse cx="150" cy="'+n(my+2)+'" rx="'+n(R*.22)+'" ry="'+n(R*.13)+'" fill="#ffd166" stroke="#e0a800" stroke-width="3"/><circle cx="150" cy="'+n(my+2+R*.2)+'" r="'+n(R*.09)+'" fill="none" stroke="#ff8fa3" stroke-width="4"/><circle cx="150" cy="'+n(my+2)+'" r="'+n(R*.06)+'" fill="#ff8fa3"/></g>');
+  return body+'<g id="head" class="g" data-part="head">'+H.join('')+'</g>'; }
 const CHARS={
   cat:{title:'Bigode 🐱',hello:'Miau? 🐾',rate:1.5,mood:'toque no gato!',svg:CAT_SVG},
   dad:{title:'Papai 👨',hello:'Oi, filhote! 👋',rate:0.8,mood:'toque no papai!',svg:human({skin:'#f0c4a2',skinD:'#d9a07c',hair:'#2a1a12',hair2:'#4a3328',style:'short',stubble:true,brow:'#2a1a12',browW:7,iris:'#4a2e1a',mouth:'#8a3b3b',shirt:'#8fb59a',pants:'#4a5a7a',shoes:'#3b3b3b'})},
@@ -294,6 +327,11 @@ const CHARS={
   bebe:{title:'Bebê 👶',hello:'Gugu dadá! 👶',rate:1.7,mood:'toque no bebê!',kind:'baby',svg:''},
   marrom:{title:'Marrom 🐶',hello:'Au au! 🐶',rate:1.3,mood:'toque no Marrom!',kind:'dog',svg:''},
   caramelo:{title:'Caramelo 🐶',hello:'Au au! 🐶',rate:1.6,mood:'toque no Caramelo!',kind:'dog',svg:''},
+  'sh-pai':{title:'Tubarão Pai 🦈',hello:'Glub glub! 🫧',rate:0.8,mood:'toque no tubarão!',kind:'shark',svg:shark({r:92,cy:132,col:'#2f8ea0',dark:'#1f6b7a',belly:'#d9f1f2',brows:'#1f6b7a',browW:7})},
+  'sh-mae':{title:'Tubarão Mãe 🦈',hello:'Glub glub! 🫧',rate:1.15,mood:'toque na tubarão!',kind:'shark',svg:shark({r:88,cy:136,col:'#a98ad6',dark:'#8366b8',belly:'#efe6f8',lashes:true,flower:true})},
+  'sh-vovo':{title:'Vovô Tubarão 🦈',hello:'Glub… glub! 🫧',rate:0.7,mood:'toque no vovô!',kind:'shark',svg:shark({r:88,cy:136,col:'#7d93ab',dark:'#5f7690',belly:'#e6edf3',cap:true,brows:'#f4f1e8',browW:7})},
+  'sh-vova':{title:'Vovó Tubarão 🦈',hello:'Glub glub, meu bem! 🫧',rate:1.05,mood:'toque na vovó!',kind:'shark',svg:shark({r:86,cy:138,col:'#7fcbb5',dark:'#5aa993',belly:'#e5f5ef',bun:true,pearls:true,lashes:true})},
+  'sh-bebe':{title:'Bebê Tubarão 🦈',hello:'Glub! 🫧',rate:1.6,mood:'toque no bebê tubarão!',kind:'shark',svg:shark({r:70,cy:170,col:'#ff9d7a',dark:'#e07a58',belly:'#fff0e8',curl:true,paci:true})},
   kid:{title:'Filhote 👦',hello:'Oi! 👋',rate:1.5,mood:'toque no filhote!',svg:human({skin:'#f6d6bb',skinD:'#dcb08e',hair:'#c08b4a',hair2:'#e4b86c',style:'bowl',brow:'#b08550',browW:4,iris:'#4a2e1a',mouth:'#8a3b3b',shirt:'#f6efe2',pants:'#f6efe2',shoes:'#ffd9a8',deco:'<path d="M150 224 V 290" stroke="#2b3a6b" stroke-width="2"/><circle cx="150" cy="240" r="2.5" fill="#fff" stroke="#2b3a6b"/><circle cx="150" cy="262" r="2.5" fill="#fff" stroke="#2b3a6b"/><ellipse cx="120" cy="240" rx="8" ry="5" fill="#9ccc65"/><ellipse cx="182" cy="250" rx="8" ry="5" fill="#ffb74d"/><ellipse cx="126" cy="270" rx="7" ry="5" fill="#90caf9"/><ellipse cx="176" cy="280" rx="8" ry="5" fill="#9ccc65"/>'})}
 };
 function spriteSvg(c,o){ const W=300,H=330; let fw=W,fh=H; if(c.w/c.h>W/H){ fh=W*c.h/c.w; } else { fw=H*c.w/c.h; } const x0=(W-fw)/2,y0=H-fh;
@@ -316,7 +354,11 @@ function dogVoice(base){ function bark(d){ tone(base*2.2,base*.9,.13,'sawtooth',
   return { hi:function(){ bark(0); bark(.22); }, mew:function(){ bark(0); },
     angry:function(){ tone(base*.6,base*.45,.6,'sawtooth',.35,0,{lp:500,vib:22,depth:8}); noise(.5,.25,0,'lowpass',350); },
     purr:function(){ tone(base*2.4,base*3,.45,'sine',.3,0,{vib:7,depth:base*.08,attack:.08}); tone(base*3,base*2.2,.5,'sine',.3,.45,{vib:7,depth:base*.08}); } }; }
-const VOICE={cat:{hi:snd.meow,mew:snd.mew,angry:snd.angry,purr:snd.purr},dad:humanVoice(150),mom:humanVoice(280),kid:humanVoice(400),tio:humanVoice(135),tia:humanVoice(300),bebe:humanVoice(520),marrom:dogVoice(190),caramelo:dogVoice(260)};
+function sharkVoice(base){ function glub(d,k){ tone(base*(k||1),base*(k||1)*1.5,.12,'sine',.35,d); tone(base*.55,base*.4,.09,'square',.18,d,{lp:700}); }
+  return { hi:function(){ glub(0,1); glub(.18,1.2); glub(.36,1.45); }, mew:function(){ glub(0,1.3); },
+    angry:function(){ tone(base*.5,base*.35,.55,'sawtooth',.35,0,{lp:600,vib:16,depth:10}); noise(.5,.2,0,'lowpass',500,250); glub(.3,.8); },
+    purr:function(){ tone(base,base*1.08,.8,'sine',.3,0,{vib:5,depth:base*.03,attack:.1}); glub(.3,1.1); glub(.55,1.3); } }; }
+const VOICE={cat:{hi:snd.meow,mew:snd.mew,angry:snd.angry,purr:snd.purr},'sh-pai':sharkVoice(160),'sh-mae':sharkVoice(300),'sh-vovo':sharkVoice(120),'sh-vova':sharkVoice(260),'sh-bebe':sharkVoice(520),dad:humanVoice(150),mom:humanVoice(280),kid:humanVoice(400),tio:humanVoice(135),tia:humanVoice(300),bebe:humanVoice(520),marrom:dogVoice(190),caramelo:dogVoice(260)};
 let cur=CHARS.cat,V=VOICE.cat;
 function setChar(k){ const c=CHARS[k]||CHARS.cat; if(!CHARS[k])k='cat'; cur=c; V=VOICE[k]; cat.innerHTML=c.svg; $('title-name').textContent=c.title;
   const chips=document.querySelectorAll('#chars .chip'); for(let i=0;i<chips.length;i++){ const on=chips[i].getAttribute('data-char')===k; chips[i].classList.toggle('on',on); if(on){ try{ chips[i].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}); }catch(e){} } }
@@ -338,8 +380,9 @@ function setState(s,ms,done){ busy=true; setCls(s); clearTimeout(timer); clearTi
 function wake(){ if(sleeping){ sleeping=false; setCls('idle'); mood.textContent='acordei!'; say('Hmm?! 😾',900); V.hi(); return true;} return false; }
 let bellyTaps=[],down=null;
 const reactions={
-  head:function(){ say(cur===CHARS.cat?'Prrrr… 😽':cur.kind==='dog'?'Auuu… 🐶':cur.kind==='baby'?'Gugu… 😊':'Hmmm… 😊'); mood.textContent='amando carinho'; V.purr(); setState('happy',1300); },
+  head:function(){ say(cur===CHARS.cat?'Prrrr… 😽':cur.kind==='dog'?'Auuu… 🐶':cur.kind==='shark'?'Glub… 😊':cur.kind==='baby'?'Gugu… 😊':'Hmmm… 😊'); mood.textContent='amando carinho'; V.purr(); setState('happy',1300); },
   ear:function(){ say('Au! Minha orelha! 🐶'); mood.textContent='não puxa!'; V.angry(); setState('ouch',900); },
+  fin:function(){ say('Ai! Minha barbatana! 😠'); mood.textContent='não puxa!'; V.angry(); setState('ouch',900); },
   hair:function(){ say('Ai! Meu cabelo! 😠'); mood.textContent='não puxa!'; V.angry(); setState('ouch',900); },
   belly:function(){ say('Hahaha! 🤣'); mood.textContent='cócegas!'; snd.giggle(); setState('laugh',1100); },
   pum:function(){ say('PUM! 🙈'); mood.textContent='ops…'; snd.fart(); spawnMid('💨',3,true); setState('shy',1400,function(){ snd.giggle(); setState('laugh',700); }); },
@@ -352,7 +395,7 @@ const reactions={
 function react(p,x,y){ if(wake())return; const r=srect();
   if(p==='belly'){ const now=performance.now(); bellyTaps=bellyTaps.filter(function(t){return now-t<1100}); bellyTaps.push(now);
     if(bellyTaps.length>=3){ bellyTaps=[]; spawn('💨',x-r.left,y-r.top,2); reactions.pum(); return; } }
-  if(busy)return; spawn(p==='tail'||p==='hair'||p==='ear'||p==='eye'||p==='slap'?'💢':'💛',x-r.left,y-r.top,2); (reactions[p]||reactions.head)(); }
+  if(busy)return; spawn(p==='tail'||p==='hair'||p==='ear'||p==='fin'||p==='eye'||p==='slap'?'💢':'💛',x-r.left,y-r.top,2); (reactions[p]||reactions.head)(); }
 function catDown(ev){ if(ev.pointerType==='mouse'&&ev.button!==0)return; ev.preventDefault(); audio();
   if(mode==='tramp'){ trampTap(); return; } if(mode==='goal')return;
   const part=ev.target&&ev.target.closest?ev.target.closest('[data-part]'):null; if(!part)return;
