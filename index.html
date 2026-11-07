@@ -34,6 +34,10 @@ body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:var(-
 header{display:flex;flex-direction:column;gap:4px}
 #hrow{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--display);font-size:1.35rem;font-weight:800}
 #mood{font-size:.78rem;font-weight:700;background:var(--panel);padding:4px 12px;border-radius:999px;box-shadow:0 2px 0 var(--shadow);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#chars{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}#chars::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:0;border-radius:999px;background:var(--panel);color:var(--fg);font-family:var(--display);font-weight:800;font-size:.82rem;padding:5px 12px;box-shadow:0 2px 0 var(--shadow);cursor:pointer}
+.chip.on{background:var(--accent);color:#fff}
+.chip:focus-visible{outline:3px solid var(--accent)}
 #meter{height:5px;border-radius:3px;background:var(--panel);overflow:hidden;opacity:0;transition:opacity .2s}
 #meter.on{opacity:1}
 #meter i{display:block;height:100%;width:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0);transition:transform .06s linear}
@@ -135,7 +139,8 @@ header{display:flex;flex-direction:column;gap:4px}
 <audio id="silent" loop playsinline preload="auto" src="data:audio/wav;base64,UklGRsQPAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YaAPAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA"></audio>
 <div id="app">
 <header>
-  <div id="hrow"><div>🐾 Bigode</div><div id="mood">toque no gato!</div></div>
+  <div id="hrow"><div id="title-name">Bigode 🐱</div><div id="mood">toque no gato!</div></div>
+  <div id="chars"><button class="chip on" data-char="cat">🐱 Bigode</button><button class="chip" data-char="dad">Papai</button><button class="chip" data-char="mom">Mamãe</button><button class="chip" data-char="kid">Filhote</button></div>
   <div id="meter"><i></i></div>
 </header>
 <div id="stage">
@@ -146,40 +151,7 @@ header{display:flex;flex-direction:column;gap:4px}
   <div id="tramp"><div class="mat"></div><div class="leg l"></div><div class="leg r"></div></div>
   <div id="ball">⚽</div>
   <div id="catbox"><div id="catwrap">
-  <svg id="cat" class="idle" viewBox="0 0 300 330" xmlns="http://www.w3.org/2000/svg" aria-label="Gato Bigode">
-    <g id="tail" class="g" data-part="tail"><path d="M205 265 C 270 270, 285 220, 262 185 C 250 170, 232 175, 236 192 C 242 210, 250 240, 205 250 Z" fill="var(--fur)"/>
-      <path d="M248 182 c-6 6 -7 16 -2 24" stroke="var(--fur2)" stroke-width="6" fill="none" stroke-linecap="round"/></g>
-    <g id="body" class="g" data-part="belly">
-      <ellipse cx="150" cy="245" rx="78" ry="70" fill="var(--fur)"/>
-      <ellipse cx="150" cy="255" rx="50" ry="50" fill="var(--cream)"/>
-      <ellipse cx="98" cy="305" rx="24" ry="14" fill="var(--fur)" data-part="paw"/>
-      <ellipse cx="202" cy="305" rx="24" ry="14" fill="var(--fur)" data-part="paw"/>
-      <g fill="var(--pink)" data-part="paw"><circle cx="90" cy="306" r="4"/><circle cx="100" cy="304" r="4"/><circle cx="110" cy="306" r="4"/>
-        <circle cx="194" cy="306" r="4"/><circle cx="204" cy="304" r="4"/><circle cx="214" cy="306" r="4"/></g>
-      <ellipse cx="86" cy="250" rx="18" ry="30" fill="var(--fur)" transform="rotate(20 86 250)" data-part="paw"/>
-      <ellipse cx="214" cy="250" rx="18" ry="30" fill="var(--fur)" transform="rotate(-20 214 250)" data-part="paw"/>
-    </g>
-    <g id="head" class="g" data-part="head">
-      <g id="ears"><path d="M62 110 L 78 40 L 128 92 Z" fill="var(--fur)"/><path d="M76 100 L 84 60 L 112 90 Z" fill="var(--pink)"/>
-        <path d="M238 110 L 222 40 L 172 92 Z" fill="var(--fur)"/><path d="M224 100 L 216 60 L 188 90 Z" fill="var(--pink)"/></g>
-      <ellipse cx="150" cy="130" rx="92" ry="78" fill="var(--fur)"/>
-      <path d="M118 62 l10 20 l10 -20 l10 20 l10 -20" stroke="var(--fur2)" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      <ellipse cx="150" cy="160" rx="58" ry="40" fill="var(--cream)"/>
-      <g id="blush" fill="var(--pink)" opacity=".7"><ellipse cx="88" cy="150" rx="14" ry="8"/><ellipse cx="212" cy="150" rx="14" ry="8"/></g>
-      <g data-part="eye"><ellipse cx="114" cy="122" rx="20" ry="24" fill="#fff"/><circle cx="117" cy="126" r="12" fill="#2b3a4a"/><circle cx="122" cy="120" r="4" fill="#fff"/>
-        <ellipse class="eye-lid" cx="114" cy="122" rx="21" ry="25" fill="var(--fur)"/></g>
-      <g data-part="eye"><ellipse cx="186" cy="122" rx="20" ry="24" fill="#fff"/><circle cx="183" cy="126" r="12" fill="#2b3a4a"/><circle cx="188" cy="120" r="4" fill="#fff"/>
-        <ellipse class="eye-lid" cx="186" cy="122" rx="21" ry="25" fill="var(--fur)"/></g>
-      <g id="eyes-x" stroke="#4a2a12" stroke-width="6" stroke-linecap="round" fill="none"><path d="M102 110 l24 24 M126 110 l-24 24"/><path d="M174 110 l24 24 M198 110 l-24 24"/></g>
-      <path id="nose" data-part="nose" d="M140 150 h20 l-10 12 Z" fill="var(--pink)"/>
-      <g stroke="var(--fur2)" stroke-width="3" stroke-linecap="round"><path d="M60 148 l45 8"/><path d="M58 164 l47 0"/><path d="M240 148 l-45 8"/><path d="M242 164 l-47 0"/></g>
-      <path id="mouth-smile" d="M132 168 q18 18 36 0" stroke="#4a2a12" stroke-width="4" fill="none" stroke-linecap="round"/>
-      <path id="mouth-open" d="M128 166 q22 34 44 0 Z" fill="#8c2f3a"/>
-      <path id="mouth-flat" d="M136 172 h28" stroke="#4a2a12" stroke-width="4" stroke-linecap="round"/>
-      <ellipse id="mouth-ooh" cx="150" cy="176" rx="10" ry="13" fill="#8c2f3a"/>
-      <path id="stache" d="M130 165 q20 -12 40 0 q-20 7 -40 0 Z" fill="#fff" stroke="#e8e0d0" stroke-width="1"/>
-    </g>
-  </svg>
+  <svg id="cat" class="idle" viewBox="0 0 300 330" xmlns="http://www.w3.org/2000/svg" aria-label="Gato Bigode"></svg>
   </div></div>
 </div>
 <div id="bar-home" class="bar">
@@ -272,6 +244,53 @@ const snd={
     return t; }
 };
 
+/* ================= characters ================= */
+const CAT_SVG='<g id="tail" class="g" data-part="tail"><path d="M205 265 C 270 270, 285 220, 262 185 C 250 170, 232 175, 236 192 C 242 210, 250 240, 205 250 Z" fill="var(--fur)"/> <path d="M248 182 c-6 6 -7 16 -2 24" stroke="var(--fur2)" stroke-width="6" fill="none" stroke-linecap="round"/></g> <g id="body" class="g" data-part="belly"> <ellipse cx="150" cy="245" rx="78" ry="70" fill="var(--fur)"/> <ellipse cx="150" cy="255" rx="50" ry="50" fill="var(--cream)"/> <ellipse cx="98" cy="305" rx="24" ry="14" fill="var(--fur)" data-part="paw"/> <ellipse cx="202" cy="305" rx="24" ry="14" fill="var(--fur)" data-part="paw"/> <g fill="var(--pink)" data-part="paw"><circle cx="90" cy="306" r="4"/><circle cx="100" cy="304" r="4"/><circle cx="110" cy="306" r="4"/> <circle cx="194" cy="306" r="4"/><circle cx="204" cy="304" r="4"/><circle cx="214" cy="306" r="4"/></g> <ellipse cx="86" cy="250" rx="18" ry="30" fill="var(--fur)" transform="rotate(20 86 250)" data-part="paw"/> <ellipse cx="214" cy="250" rx="18" ry="30" fill="var(--fur)" transform="rotate(-20 214 250)" data-part="paw"/> </g> <g id="head" class="g" data-part="head"> <g id="ears"><path d="M62 110 L 78 40 L 128 92 Z" fill="var(--fur)"/><path d="M76 100 L 84 60 L 112 90 Z" fill="var(--pink)"/> <path d="M238 110 L 222 40 L 172 92 Z" fill="var(--fur)"/><path d="M224 100 L 216 60 L 188 90 Z" fill="var(--pink)"/></g> <ellipse cx="150" cy="130" rx="92" ry="78" fill="var(--fur)"/> <path d="M118 62 l10 20 l10 -20 l10 20 l10 -20" stroke="var(--fur2)" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/> <ellipse cx="150" cy="160" rx="58" ry="40" fill="var(--cream)"/> <g id="blush" fill="var(--pink)" opacity=".7"><ellipse cx="88" cy="150" rx="14" ry="8"/><ellipse cx="212" cy="150" rx="14" ry="8"/></g> <g data-part="eye"><ellipse cx="114" cy="122" rx="20" ry="24" fill="#fff"/><circle cx="117" cy="126" r="12" fill="#2b3a4a"/><circle cx="122" cy="120" r="4" fill="#fff"/> <ellipse class="eye-lid" cx="114" cy="122" rx="21" ry="25" fill="var(--fur)"/></g> <g data-part="eye"><ellipse cx="186" cy="122" rx="20" ry="24" fill="#fff"/><circle cx="183" cy="126" r="12" fill="#2b3a4a"/><circle cx="188" cy="120" r="4" fill="#fff"/> <ellipse class="eye-lid" cx="186" cy="122" rx="21" ry="25" fill="var(--fur)"/></g> <g id="eyes-x" stroke="#4a2a12" stroke-width="6" stroke-linecap="round" fill="none"><path d="M102 110 l24 24 M126 110 l-24 24"/><path d="M174 110 l24 24 M198 110 l-24 24"/></g> <path id="nose" data-part="nose" d="M140 150 h20 l-10 12 Z" fill="var(--pink)"/> <g stroke="var(--fur2)" stroke-width="3" stroke-linecap="round"><path d="M60 148 l45 8"/><path d="M58 164 l47 0"/><path d="M240 148 l-45 8"/><path d="M242 164 l-47 0"/></g> <path id="mouth-smile" d="M132 168 q18 18 36 0" stroke="#4a2a12" stroke-width="4" fill="none" stroke-linecap="round"/> <path id="mouth-open" d="M128 166 q22 34 44 0 Z" fill="#8c2f3a"/> <path id="mouth-flat" d="M136 172 h28" stroke="#4a2a12" stroke-width="4" stroke-linecap="round"/> <ellipse id="mouth-ooh" cx="150" cy="176" rx="10" ry="13" fill="#8c2f3a"/> <path id="stache" d="M130 165 q20 -12 40 0 q-20 7 -40 0 Z" fill="#fff" stroke="#e8e0d0" stroke-width="1"/> </g>';
+function eye(cx,o){ return '<g data-part="eye"><ellipse cx="'+cx+'" cy="128" rx="16" ry="19" fill="#fff"/><circle cx="'+cx+'" cy="131" r="9" fill="'+o.iris+'"/><circle cx="'+cx+'" cy="131" r="4.5" fill="#1b1b1b"/><circle cx="'+(cx+4)+'" cy="125" r="3" fill="#fff"/><ellipse class="eye-lid" cx="'+cx+'" cy="128" rx="17" ry="20" fill="'+o.skin+'"/></g>'; }
+function human(o){ const H=[];
+  H.push('<g id="ears" fill="'+o.skin+'" stroke="'+o.skinD+'" stroke-width="2"><ellipse cx="74" cy="142" rx="12" ry="16"/><ellipse cx="226" cy="142" rx="12" ry="16"/></g>');
+  H.push('<ellipse cx="150" cy="135" rx="78" ry="84" fill="'+o.skin+'"/>');
+  if(o.stubble) H.push('<path d="M84 150 Q 150 252 216 150 Q 150 206 84 150 Z" fill="#2a1d18" opacity=".2"/>');
+  if(o.style==='short') H.push('<path data-part="hair" d="M72 122 C 72 74, 94 56, 110 52 L 116 36 L 128 48 L 140 32 L 150 46 L 162 32 L 172 48 L 184 38 L 190 54 C 212 60, 230 80, 228 122 C 214 98, 188 86, 150 86 C 112 86, 86 98, 72 122 Z" fill="'+o.hair+'"/>');
+  if(o.style==='bowl') H.push('<path data-part="hair" d="M66 152 C 62 82, 100 36, 150 36 C 200 36, 238 82, 234 152 L 222 152 C 221 132, 216 114, 208 106 Q 196 116 184 106 Q 172 116 160 106 Q 148 116 136 106 Q 124 116 112 106 Q 100 114 92 106 C 84 114, 79 132, 78 152 Z" fill="'+o.hair+'"/><path d="M110 58 C 125 48, 150 46, 172 52 M 96 78 C 104 66, 118 58, 130 56" stroke="'+o.hair2+'" stroke-width="6" fill="none" stroke-linecap="round" opacity=".8"/>');
+  if(o.style==='long') H.push('<path data-part="hair" d="M150 46 C 118 46, 84 66, 72 122 L 64 250 L 86 250 C 86 190, 94 140, 106 112 C 116 92, 132 70, 150 62 Z" fill="'+o.hair+'"/><path data-part="hair" d="M150 46 C 182 46, 216 66, 228 122 L 236 250 L 214 250 C 214 190, 206 140, 194 112 C 184 92, 168 70, 150 62 Z" fill="'+o.hair+'"/><path d="M96 132 C 100 112, 110 92, 124 78" stroke="'+o.hair2+'" stroke-width="4" fill="none" stroke-linecap="round" opacity=".6"/>');
+  H.push('<g stroke="'+o.brow+'" stroke-width="'+o.browW+'" stroke-linecap="round" fill="none"><path d="M98 104 q20 -12 40 -4"/><path d="M202 104 q-20 -12 -40 -4"/></g>');
+  H.push('<g id="blush" fill="#ff9aa8" opacity=".55"><ellipse cx="100" cy="158" rx="14" ry="8"/><ellipse cx="200" cy="158" rx="14" ry="8"/></g>');
+  H.push(eye(118,o)+eye(182,o));
+  H.push('<g id="eyes-x" stroke="#4a2a12" stroke-width="6" stroke-linecap="round" fill="none"><path d="M106 116 l24 24 M130 116 l-24 24"/><path d="M170 116 l24 24 M194 116 l-24 24"/></g>');
+  H.push('<ellipse id="nose" data-part="nose" cx="150" cy="154" rx="9" ry="6" fill="'+o.skinD+'"/>');
+  H.push('<path id="mouth-smile" d="M132 172 q18 16 36 0" stroke="'+o.mouth+'" stroke-width="'+(o.lips?6:4)+'" fill="none" stroke-linecap="round"/>');
+  H.push('<path id="mouth-open" d="M128 170 q22 32 44 0 Z" fill="#8c2f3a"/>');
+  H.push('<path id="mouth-flat" d="M136 176 h28" stroke="'+o.mouth+'" stroke-width="4" stroke-linecap="round"/>');
+  H.push('<ellipse id="mouth-ooh" cx="150" cy="180" rx="10" ry="13" fill="#8c2f3a"/>');
+  H.push('<path id="stache" d="M130 168 q20 -12 40 0 q-20 7 -40 0 Z" fill="#fff" stroke="#e8e0d0" stroke-width="1"/>');
+  const back=(o.style==='long')?'<path data-part="hair" d="M70 120 C 70 48, 230 48, 230 120 L 240 262 C 240 278, 222 286, 202 284 L 98 284 C 78 286, 60 278, 60 262 Z" fill="'+o.hair+'"/>':'';
+  const body='<g id="body" class="g" data-part="belly"><rect x="138" y="200" width="24" height="30" rx="8" fill="'+o.skinD+'"/>'
+    +'<rect x="112" y="282" width="30" height="34" rx="9" fill="'+o.pants+'"/><rect x="158" y="282" width="30" height="34" rx="9" fill="'+o.pants+'"/>'
+    +'<ellipse cx="126" cy="318" rx="21" ry="9" fill="'+o.shoes+'" data-part="paw"/><ellipse cx="174" cy="318" rx="21" ry="9" fill="'+o.shoes+'" data-part="paw"/>'
+    +'<path d="M98 224 C 110 212, 130 208, 150 208 C 170 208, 190 212, 202 224 L 208 292 L 92 292 Z" fill="'+o.shirt+'"/>'+(o.deco||'')
+    +'<ellipse cx="86" cy="254" rx="15" ry="32" transform="rotate(18 86 254)" fill="'+o.shirt+'" data-part="paw"/><ellipse cx="214" cy="254" rx="15" ry="32" transform="rotate(-18 214 254)" fill="'+o.shirt+'" data-part="paw"/>'
+    +'<circle cx="76" cy="284" r="11" fill="'+o.skin+'" data-part="paw"/><circle cx="224" cy="284" r="11" fill="'+o.skin+'" data-part="paw"/></g>';
+  return back+body+'<g id="head" class="g" data-part="head">'+H.join('')+'</g>'; }
+const CHARS={
+  cat:{title:'Bigode 🐱',hello:'Miau? 🐾',rate:1.5,mood:'toque no gato!',svg:CAT_SVG},
+  dad:{title:'Papai 👨',hello:'Oi, filhote! 👋',rate:0.8,mood:'toque no papai!',svg:human({skin:'#f0c4a2',skinD:'#d9a07c',hair:'#2a1a12',hair2:'#4a3328',style:'short',stubble:true,brow:'#2a1a12',browW:7,iris:'#4a2e1a',mouth:'#8a3b3b',shirt:'#8fb59a',pants:'#4a5a7a',shoes:'#3b3b3b'})},
+  mom:{title:'Mamãe 👩',hello:'Oi, meu amor! 💕',rate:1.15,mood:'toque na mamãe!',svg:human({skin:'#f0c7a6',skinD:'#d6a07e',hair:'#3a2416',hair2:'#6a4a32',style:'long',brow:'#3a2416',browW:5,iris:'#4a2e1a',mouth:'#d9627a',lips:true,shirt:'#efe4cf',pants:'#5a4a5e',shoes:'#c98a7a',deco:'<path d="M126 228 q24 24 48 0" stroke="#d9b24a" stroke-width="2.5" fill="none"/><circle cx="150" cy="241" r="4" fill="#e8c850"/>'})},
+  kid:{title:'Filhote 👦',hello:'Oi! 👋',rate:1.5,mood:'toque no filhote!',svg:human({skin:'#f6d6bb',skinD:'#dcb08e',hair:'#c08b4a',hair2:'#e4b86c',style:'bowl',brow:'#b08550',browW:4,iris:'#4a2e1a',mouth:'#8a3b3b',shirt:'#f6efe2',pants:'#f6efe2',shoes:'#ffd9a8',deco:'<path d="M150 224 V 290" stroke="#2b3a6b" stroke-width="2"/><circle cx="150" cy="240" r="2.5" fill="#fff" stroke="#2b3a6b"/><circle cx="150" cy="262" r="2.5" fill="#fff" stroke="#2b3a6b"/><ellipse cx="120" cy="240" rx="8" ry="5" fill="#9ccc65"/><ellipse cx="182" cy="250" rx="8" ry="5" fill="#ffb74d"/><ellipse cx="126" cy="270" rx="7" ry="5" fill="#90caf9"/><ellipse cx="176" cy="280" rx="8" ry="5" fill="#9ccc65"/>'})}
+};
+function humanVoice(base){ return {
+  hi:function(){ tone(base,base*1.35,.16,'sawtooth',.3,0,{lp:1400,vib:5,depth:6}); tone(base*1.35,base*1.1,.3,'sawtooth',.3,.16,{lp:1400}); },
+  mew:function(){ tone(base*1.1,base*1.5,.14,'sawtooth',.28,0,{lp:1600}); },
+  angry:function(){ tone(base*.95,base*.7,.45,'square',.28,0,{lp:900,vib:12,depth:12}); },
+  purr:function(){ tone(base*.9,base,.9,'sine',.32,0,{vib:6,depth:base*.04,attack:.12}); } }; }
+const VOICE={cat:{hi:snd.meow,mew:snd.mew,angry:snd.angry,purr:snd.purr},dad:humanVoice(150),mom:humanVoice(280),kid:humanVoice(400)};
+let cur=CHARS.cat,V=VOICE.cat;
+function setChar(k){ const c=CHARS[k]||CHARS.cat; if(!CHARS[k])k='cat'; cur=c; V=VOICE[k]; cat.innerHTML=c.svg; $('title-name').textContent=c.title;
+  const chips=document.querySelectorAll('#chars .chip'); for(let i=0;i<chips.length;i++)chips[i].classList.toggle('on',chips[i].getAttribute('data-char')===k);
+  clearTimeout(timer); clearTimeout(extraT); busy=false; setCls(restState()); if(mode==='home')mood.textContent=c.mood; try{localStorage.setItem('gb-char',k)}catch(e){} }
+(function(){ let k='cat'; try{ k=localStorage.getItem('gb-char')||'cat'; }catch(e){} setChar(k); })();
+$('chars').addEventListener('click',function(ev){ const b=ev.target.closest?ev.target.closest('.chip'):null; if(!b)return; audio(); setChar(b.getAttribute('data-char')); say(cur.hello,1100); V.hi(); });
+
 /* ================= cat behaviour ================= */
 function say(txt,ms){ bubble.textContent=txt; bubble.classList.add('on'); clearTimeout(bubble._t); bubble._t=setTimeout(function(){bubble.classList.remove('on')},ms||1200); }
 function srect(){ return stage.getBoundingClientRect(); }
@@ -282,14 +301,15 @@ function setCls(c){ cat.setAttribute('class',c); }
 function getCls(){ return cat.getAttribute('class')||''; }
 function restState(){ return sleeping?'sleep':'idle'; }
 function setState(s,ms,done){ busy=true; setCls(s); clearTimeout(timer); clearTimeout(extraT); timer=setTimeout(function(){ setCls(restState()); busy=false; if(done)done(); },ms); }
-function wake(){ if(sleeping){ sleeping=false; setCls('idle'); mood.textContent='acordei!'; say('Hmm?! 😾',900); snd.meow(); return true;} return false; }
+function wake(){ if(sleeping){ sleeping=false; setCls('idle'); mood.textContent='acordei!'; say('Hmm?! 😾',900); V.hi(); return true;} return false; }
 let bellyTaps=[],down=null;
 const reactions={
-  head:function(){ say('Prrrr… 😽'); mood.textContent='amando carinho'; snd.purr(); setState('happy',1300); },
+  head:function(){ say(cur===CHARS.cat?'Prrrr… 😽':'Hmmm… 😊'); mood.textContent='amando carinho'; V.purr(); setState('happy',1300); },
+  hair:function(){ say('Ai! Meu cabelo! 😠'); mood.textContent='não puxa!'; V.angry(); setState('ouch',900); },
   belly:function(){ say('Hahaha! 🤣'); mood.textContent='cócegas!'; snd.giggle(); setState('laugh',1100); },
   pum:function(){ say('PUM! 🙈'); mood.textContent='ops…'; snd.fart(); spawnMid('💨',3,true); setState('shy',1400,function(){ snd.giggle(); setState('laugh',700); }); },
   paw:function(){ say('Hihihi! 😹'); mood.textContent='cócegas no pé'; snd.giggle(); setState('laugh',800); },
-  tail:function(){ say('MIAAAU! 😾'); mood.textContent='ai, meu rabo!'; snd.angry(); setState('ouch',900); },
+  tail:function(){ say('MIAAAU! 😾'); mood.textContent='ai, meu rabo!'; V.angry(); setState('ouch',900); },
   nose:function(){ say('A-a-ATCHIM! 🤧'); mood.textContent='espirrou'; snd.sneeze(); setState('sneeze',700); },
   eye:function(){ say('Ei, meu olho! 🙀'); mood.textContent='pisca pisca'; snd.ouch(); setState('ouch',800); },
   slap:function(){ say('Ai! 😵'); mood.textContent='tonto…'; snd.ouch(); snd.dizzy(); spawnMid('💫',3); setState('dizzy',1500); }
@@ -297,7 +317,7 @@ const reactions={
 function react(p,x,y){ if(wake())return; const r=srect();
   if(p==='belly'){ const now=performance.now(); bellyTaps=bellyTaps.filter(function(t){return now-t<1100}); bellyTaps.push(now);
     if(bellyTaps.length>=3){ bellyTaps=[]; spawn('💨',x-r.left,y-r.top,2); reactions.pum(); return; } }
-  if(busy)return; spawn(p==='tail'||p==='eye'||p==='slap'?'💢':'💛',x-r.left,y-r.top,2); (reactions[p]||reactions.head)(); }
+  if(busy)return; spawn(p==='tail'||p==='hair'||p==='eye'||p==='slap'?'💢':'💛',x-r.left,y-r.top,2); (reactions[p]||reactions.head)(); }
 function catDown(ev){ if(ev.pointerType==='mouse'&&ev.button!==0)return; ev.preventDefault(); audio();
   if(mode==='tramp'){ trampTap(); return; } if(mode==='goal')return;
   const part=ev.target&&ev.target.closest?ev.target.closest('[data-part]'):null; if(!part)return;
@@ -322,7 +342,7 @@ $('b-bath').onclick=function(){ audio(); if(wake()||busy)return; mood.textConten
   setState('happy',2300,function(){ snd.shake(); spawnMid('💧',5); setState('shake',800,function(){ say('Limpinho! ✨'); snd.sparkle(); spawnMid('✨',4); mood.textContent='cheiroso'; }); }); };
 $('b-dance').onclick=function(){ audio(); if(wake()||busy)return; mood.textContent='dançando'; say('Lá lá lá! 🎶'); const dur=snd.jingle();
   let n=0; const notes=setInterval(function(){ spawnMid(['🎵','🎶'][n%2],1); if(++n*0.45>dur)clearInterval(notes); },450);
-  setState('dance',dur*1000,function(){ snd.meow(); mood.textContent='ufa!'; }); };
+  setState('dance',dur*1000,function(){ V.hi(); mood.textContent='ufa!'; }); };
 $('b-sleep').onclick=function(){ audio(); if(sleeping){wake();return;} if(busy)return; sleeping=true; busy=false; rec=null; setCls('sleep'); mood.textContent='dormindo… toque para acordar'; say('Zzz… 💤',2500); snd.snore(); };
 
 /* ================= mini games ================= */
@@ -331,7 +351,7 @@ function enterGame(type){ audio(); wake(); if(busy)return; mode=type; app.classN
   if(type==='tramp'){ trampEl.style.display='block'; catbox.style.transform='translateY(-62px) scale(.82)'; scoreEl.textContent='Pulos: 0'; mood.textContent='toque para pular!'; say('Pula! 🤸'); game.raf=requestAnimationFrame(loop); }
   else { goalEl.style.display='block'; ballEl.style.display='block'; catbox.classList.add('goalpos'); scoreEl.textContent='Gols: 0'; mood.textContent='toque na bola!'; say('Chuta! ⚽'); } }
 function leaveGame(){ if(game&&game.raf)cancelAnimationFrame(game.raf); game=null; mode='home'; app.className=''; barHome.hidden=false; barGame.hidden=true;
-  trampEl.style.display='none'; goalEl.style.display='none'; ballEl.style.display='none'; ballEl.style.transform=''; catbox.style.transform=''; catbox.classList.remove('goalpos'); catwrap.classList.remove('hop'); setCls(restState()); mood.textContent='toque no gato!'; }
+  trampEl.style.display='none'; goalEl.style.display='none'; ballEl.style.display='none'; ballEl.style.transform=''; catbox.style.transform=''; catbox.classList.remove('goalpos'); catwrap.classList.remove('hop'); setCls(restState()); mood.textContent=cur.mood; }
 function squash(){ trampEl.classList.remove('squash'); void trampEl.offsetWidth; trampEl.classList.add('squash'); }
 function trampTap(){ const g=game; if(!g)return;
   if(g.ty<8){ g.vy=1150; g.boosted=false; g.jumps++; snd.boing(); squash(); }
@@ -348,7 +368,7 @@ function kick(ev){ if(ev)ev.preventDefault(); audio(); const g=game; if(!g||g.ty
   const x0=br.left-st.left+br.width/2,y0=br.top-st.top+br.height/2; const goalIn=Math.random()<.75;
   const x1=gr.left-st.left+gr.width/2+(goalIn?(Math.random()*50-25):(gr.width/2+14)*(Math.random()<.5?-1:1)); const y1=gr.top-st.top+gr.height*.6;
   const T=720,t0=performance.now();
-  setTimeout(function(){ catwrap.classList.remove('hop'); void catwrap.offsetWidth; catwrap.classList.add('hop'); setCls('air'); snd.mew(); },T*.35);
+  setTimeout(function(){ catwrap.classList.remove('hop'); void catwrap.offsetWidth; catwrap.classList.add('hop'); setCls('air'); V.mew(); },T*.35);
   function anim(now){ const p=Math.min(1,(now-t0)/T); const x=x0+(x1-x0)*p,y=y0+(y1-y0)*p-Math.sin(p*Math.PI)*110;
     ballEl.style.transform='translate('+(x-x0)+'px,'+(y-y0)+'px) rotate('+(p*720)+'deg)'; if(p<1)requestAnimationFrame(anim); else land(); }
   function land(){ if(goalIn){ g.score++; scoreEl.textContent='Gols: '+g.score; say('GOOOL! ⚽',1500); snd.crowd(); snd.whistle(); spawn('🎉',x1,y1+40,5); setCls('laugh'); }
@@ -377,14 +397,14 @@ async function micToggle(){
     msrc.connect(proc); proc.connect(mute); mute.connect(ac.destination); proc.onaudioprocess=onAudio;
   }catch(e){ micBtn.classList.remove('wait'); micOff(); noMic('microfone indisponível'); return; }
   listening=true; pre=[]; floor=0.01; micBtn.classList.remove('wait'); micBtn.classList.add('on'); micLabel.textContent='Ouvindo'; meter.classList.add('on');
-  mood.textContent='fale com o Bigode!'; say('Fala comigo! 🎤',1500); snd.mew();
+  mood.textContent='fale com o Bigode!'; say('Fala comigo! 🎤',1500); V.mew();
   setTimeout(function(){ if(stream&&ac&&ac.state!=='running'){ audio(); mood.textContent='toque no gato para ligar o som'; } },400);
 }
 function micOff(){ listening=false; manual=false; rec=null;
   try{ stream.getTracks().forEach(function(t){t.stop()}); }catch(e){} stream=null;
   try{ proc.disconnect(); msrc.disconnect(); mute.disconnect(); }catch(e){} proc=msrc=mute=null;
   setSession('playback'); meter.classList.remove('on'); meterBar.style.transform='scaleX(0)';
-  micBtn.classList.remove('on','wait','rec'); micLabel.textContent='Falar'; cat.classList.remove('listen'); mood.textContent='toque no gato!'; }
+  micBtn.classList.remove('on','wait','rec'); micLabel.textContent='Falar'; cat.classList.remove('listen'); mood.textContent=cur.mood; }
 let holdT=null,held=false;
 micBtn.addEventListener('pointerdown',function(ev){ if(ev.pointerType==='mouse'&&ev.button!==0)return; held=false; clearTimeout(holdT);
   if(!stream)return; holdT=setTimeout(function(){ held=true; manual=true; rec=[]; voiced=0; micBtn.classList.add('rec'); cat.classList.add('listen'); mood.textContent='pode falar…'; },350); });
@@ -417,10 +437,10 @@ function finish(byMax){ const chunks=rec; rec=null; speech=0; silence=0; cat.cla
   if(peak>0.001&&peak<0.7){ const g=0.7/peak; for(let i=0;i<len;i++)out[i]*=g; }
   playBack(buf);
 }
-function playBack(buf){ audio(); let src; try{ src=ac.createBufferSource(); src.buffer=buf; src.playbackRate.value=1.5;
+function playBack(buf){ audio(); let src; try{ src=ac.createBufferSource(); src.buffer=buf; src.playbackRate.value=cur.rate;
     const g=ac.createGain(); g.gain.value=1.3; src.connect(g); g.connect(master); src.start(); }catch(e){ return; }
   playing=true; busy=true; clearTimeout(timer); setCls('talk'); mood.textContent='repetindo! 😸'; spawnMid('🎶',3);
-  const dur=buf.duration/1.5; let ended=false;
+  const dur=buf.duration/cur.rate; let ended=false;
   function done(){ if(ended)return; ended=true; playing=false; busy=false; setCls(restState()); quietUntil=performance.now()+500; mood.textContent='fale com o Bigode!'; }
   src.onended=done; setTimeout(done,dur*1000+250);
 }
@@ -429,7 +449,7 @@ function playBack(buf){ audio(); let src; try{ src=ac.createBufferSource(); src.
 setInterval(function(){ if(sleeping){ snd.snore(); const s=srect(); spawn('💤',s.width*.6,s.height*.3,1,true); return;}
   if(!busy){ cat.classList.add('blink'); setTimeout(function(){cat.classList.remove('blink')},150);} },2800);
 setInterval(function(){ if(busy||sleeping||rec||mode!=='home')return; const r=Math.random();
-  if(r<.3){ say('Miau? 🐾',900); snd.meow(); } else if(r<.45){ say('Aaaah… 🥱',900); snd.yawn(); setState('yawn',900); } },9000);
+  if(r<.3){ say(cur.hello,900); V.hi(); } else if(r<.45){ say('Aaaah… 🥱',900); snd.yawn(); setState('yawn',900); } },9000);
 })();
 </script>
 
