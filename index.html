@@ -14,44 +14,68 @@
 <title>Gato Bigode</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
-/* Layout: one-screen playroom, cat centered, action bar pinned at bottom */
+/* Layout: one-screen playroom. Header with mood + mic meter, stage with the cat and game props, 2x4 action grid */
 :root{
   --bg:#ffe8c2; --wall:#ffd59a; --floor:#f2b56b; --fg:#4a2a12; --accent:#ff7a3d;
   --fur:#ff9d3a; --fur2:#e8832a; --cream:#fff2dc; --pink:#ff8fa3; --panel:#fff6e6; --shadow:rgba(90,40,0,.25);
+  --sky:#bfe6ff; --grass:#8fd15c;
   --display:'Baloo 2','Comic Sans MS',cursive; --body:'Nunito',system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  --bg:#2b1d3a; --wall:#3a2a52; --floor:#5a3a4a; --fg:#ffe9d2; --panel:#3d2e55; --shadow:rgba(0,0,0,.45); color-scheme:dark } }
-:root[data-theme="dark"]{ --bg:#2b1d3a; --wall:#3a2a52; --floor:#5a3a4a; --fg:#ffe9d2; --panel:#3d2e55; --shadow:rgba(0,0,0,.45); color-scheme:dark }
+  --bg:#2b1d3a; --wall:#3a2a52; --floor:#5a3a4a; --fg:#ffe9d2; --panel:#3d2e55; --shadow:rgba(0,0,0,.45); --sky:#2c3e6b; --grass:#3f7a3a; color-scheme:dark } }
+:root[data-theme="dark"]{ --bg:#2b1d3a; --wall:#3a2a52; --floor:#5a3a4a; --fg:#ffe9d2; --panel:#3d2e55; --shadow:rgba(0,0,0,.45); --sky:#2c3e6b; --grass:#3f7a3a; color-scheme:dark }
 html{height:100%;box-sizing:border-box}
 body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);overflow:hidden;overscroll-behavior:none;
   touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
-#app{height:100%;display:flex;flex-direction:column;
+#app{height:100%;display:flex;flex-direction:column;gap:6px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px 10px;box-sizing:border-box;
   background:linear-gradient(var(--wall) 0 62%,var(--floor) 62% 100%)}
-header{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--display);font-size:1.4rem;font-weight:800}
-#mood{font-size:.8rem;font-weight:700;background:var(--panel);padding:4px 12px;border-radius:999px;box-shadow:0 2px 0 var(--shadow);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#app.tramp,#app.goal{background:linear-gradient(var(--sky) 0 70%,var(--grass) 70% 100%)}
+header{display:flex;flex-direction:column;gap:4px}
+#hrow{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--display);font-size:1.35rem;font-weight:800}
+#mood{font-size:.78rem;font-weight:700;background:var(--panel);padding:4px 12px;border-radius:999px;box-shadow:0 2px 0 var(--shadow);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#meter{height:5px;border-radius:3px;background:var(--panel);overflow:hidden;opacity:0;transition:opacity .2s}
+#meter.on{opacity:1}
+#meter i{display:block;height:100%;width:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0);transition:transform .06s linear}
 #stage{flex:1;min-height:0;position:relative;display:flex;align-items:flex-end;justify-content:center;touch-action:none}
-#cat{width:min(92vw,380px);max-height:100%;touch-action:none;cursor:pointer;filter:drop-shadow(0 10px 6px var(--shadow))}
-#bubble{position:absolute;top:4%;left:50%;transform:translateX(-50%);background:var(--panel);padding:8px 16px;border-radius:18px;
+#catbox{position:relative;display:flex;justify-content:center;max-width:100%;transform-origin:50% 100%;will-change:transform}
+#catbox.goalpos{transform:translateX(30%) scale(.78)}
+#catwrap{display:flex}
+#catwrap.hop{animation:hop .55s ease-out}
+@keyframes hop{35%{transform:translateY(-130px) rotate(-8deg)}70%{transform:translateY(-20px) rotate(3deg)}}
+#cat{width:min(88vw,340px);height:auto;max-height:min(62vh,420px);touch-action:none;cursor:pointer;filter:drop-shadow(0 10px 6px var(--shadow))}
+#bubble{position:absolute;top:4%;left:50%;transform:translateX(-50%);background:var(--panel);padding:8px 16px;border-radius:18px;z-index:3;
   font-family:var(--display);font-weight:800;font-size:1.3rem;box-shadow:0 3px 0 var(--shadow);opacity:0;transition:opacity .2s;white-space:nowrap}
 #bubble.on{opacity:1}
 #bubble::after{content:"";position:absolute;left:50%;bottom:-8px;border:8px solid transparent;border-top-color:var(--panel);border-bottom:0;transform:translateX(-50%)}
-#fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+#fx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
 .fx{position:absolute;font-size:2rem;animation:fly 1.1s ease-out forwards}
-@keyframes fly{from{transform:translateY(0) scale(.6);opacity:1}to{transform:translateY(-120px) scale(1.3);opacity:0}}
-#item{position:absolute;bottom:38%;left:50%;font-size:3.2rem;transform:translateX(-50%);display:none;pointer-events:none}
-#bar{display:flex;gap:6px;justify-content:center;padding-top:8px}
-#bar button{flex:1;max-width:100px;min-width:0;border:0;border-radius:16px;background:var(--panel);color:var(--fg);font-family:var(--display);font-weight:800;
-  font-size:clamp(.72rem,2.8vw,.95rem);padding:8px 2px;box-shadow:0 4px 0 var(--shadow);display:flex;flex-direction:column;align-items:center;cursor:pointer;line-height:1.2}
-#bar button span{font-size:clamp(1.3rem,6vw,1.7rem)}
-#bar button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--shadow)}
-#bar button:focus-visible{outline:3px solid var(--accent)}
+.fx.slow{animation-duration:2.2s}
+@keyframes fly{from{transform:translateY(0) scale(.6);opacity:1}to{transform:translateY(-140px) scale(1.3);opacity:0}}
+#item{position:absolute;bottom:34%;left:50%;font-size:3.4rem;transform:translateX(-50%);display:none;pointer-events:none;z-index:2}
+#tramp{position:absolute;bottom:14px;left:50%;width:min(72vw,300px);height:56px;transform:translateX(-50%);display:none}
+#tramp .mat{position:absolute;left:0;right:0;top:0;height:34px;border-radius:50%;background:#5bb2ff;border:7px solid #e03a3a;box-sizing:border-box;box-shadow:inset 0 -6px 0 #2f86d6}
+#tramp .leg{position:absolute;top:28px;width:7px;height:28px;background:#5a5a5a;border-radius:3px}
+#tramp .leg.l{left:18%}#tramp .leg.r{right:18%}
+#tramp.squash .mat{animation:squash .22s ease-out}
+@keyframes squash{40%{transform:scaleY(.6) translateY(8px)}}
+#goal{position:absolute;top:5%;left:50%;transform:translateX(-50%);font-size:5.4rem;line-height:1;display:none;pointer-events:none;filter:drop-shadow(0 4px 3px var(--shadow))}
+#ball{position:absolute;bottom:22px;left:18%;font-size:3.2rem;line-height:1;display:none;cursor:pointer;touch-action:none;filter:drop-shadow(0 4px 3px var(--shadow));z-index:2}
+.bar{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+#bar-game{grid-template-columns:1fr 2fr}
+.bar button,.pill{border:0;border-radius:16px;background:var(--panel);color:var(--fg);font-family:var(--display);font-weight:800;
+  font-size:clamp(.72rem,2.8vw,.95rem);padding:7px 2px;box-shadow:0 4px 0 var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;line-height:1.2}
+.bar button{cursor:pointer}
+.bar button span{font-size:clamp(1.3rem,6vw,1.7rem)}
+.pill{font-size:1.1rem;font-variant-numeric:tabular-nums}
+.bar button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--shadow)}
+.bar button:focus-visible{outline:3px solid var(--accent)}
 #b-mic.wait{opacity:.6}
 #b-mic.on{background:var(--accent);color:#fff}
 #b-mic.on b::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;margin-right:5px;animation:pulse 1s infinite}
+#b-mic.rec{background:#e03a3a;color:#fff}
 @keyframes pulse{50%{opacity:.15}}
-/* cat animation states */
+/* ---- cat parts ---- */
 .g{transform-box:fill-box;transform-origin:center}
 #body{transform-origin:50% 100%;animation:breathe 2.6s ease-in-out infinite}
 @keyframes breathe{50%{transform:scaleY(1.02)}}
@@ -59,12 +83,15 @@ header{display:flex;justify-content:space-between;align-items:center;gap:8px;fon
 @keyframes wag{50%{transform:rotate(12deg)}}
 #ears{transition:transform .2s}
 .eye-lid{transform-origin:50% 0;transform:scaleY(0);transition:transform .12s}
-#cat.blink .eye-lid,#cat.happy .eye-lid,#cat.sleep .eye-lid{transform:scaleY(1)}
-#mouth-smile,#mouth-open,#mouth-flat,#mouth-ooh{display:none}
-#cat.idle #mouth-smile,#cat.happy #mouth-smile{display:block}
-#cat.laugh #mouth-open,#cat.eat #mouth-open{display:block}
-#cat.ouch #mouth-ooh{display:block}
+#cat.blink .eye-lid,#cat.happy .eye-lid,#cat.sleep .eye-lid,#cat.yawn .eye-lid,#cat.shake .eye-lid,#cat.dizzy .eye-lid,#cat.milk .eye-lid{transform:scaleY(1)}
+#mouth-smile,#mouth-open,#mouth-flat,#mouth-ooh,#eyes-x,#stache,#blush{display:none}
+#cat.idle #mouth-smile,#cat.happy #mouth-smile,#cat.dance #mouth-smile,#cat.shy #mouth-smile,#cat.shake #mouth-smile{display:block}
+#cat.laugh #mouth-open,#cat.eat #mouth-open,#cat.yawn #mouth-open,#cat.air #mouth-open,#cat.milk #mouth-open{display:block}
 #cat.sleep #mouth-flat{display:block}
+#cat.ouch #mouth-ooh,#cat.dizzy #mouth-ooh,#cat.sneeze #mouth-ooh{display:block}
+#cat.dizzy #eyes-x{display:block}
+#cat.shy #blush,#cat.dizzy #blush{display:block}
+#cat.stache #stache{display:block}
 #cat.laugh #body{animation:bounce .18s ease-in-out infinite}
 @keyframes bounce{50%{transform:translateY(-10px) scaleX(1.03)}}
 #cat.ouch{animation:jump .5s ease-out}
@@ -79,6 +106,10 @@ header{display:flex;justify-content:space-between;align-items:center;gap:8px;fon
 @keyframes sneeze{40%{transform:rotate(-10deg) translateY(-6px)}70%{transform:rotate(12deg) translateY(10px)}}
 #cat.eat #head{animation:chomp .25s ease-in-out infinite}
 @keyframes chomp{50%{transform:translateY(5px)}}
+#cat.milk #head{animation:drink .4s ease-in-out infinite}
+@keyframes drink{50%{transform:translateY(-4px) rotate(-3deg)}}
+#cat.yawn #head{animation:yawnhead .9s ease-in-out}
+@keyframes yawnhead{50%{transform:translateY(-6px) rotate(-4deg)}}
 #cat.listen #ears{transform:translateY(-9px)}
 #cat.listen #head{animation:tilt .7s ease-in-out infinite alternate}
 @keyframes tilt{to{transform:rotate(-7deg)}}
@@ -87,16 +118,34 @@ header{display:flex;justify-content:space-between;align-items:center;gap:8px;fon
 @keyframes talk{0%{transform:scaleY(1)}50%{transform:scaleY(.3)}}
 #cat.talk #head{animation:bob .3s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(4px)}}
+#cat.dance #body{animation:sway .45s ease-in-out infinite alternate}
+@keyframes sway{from{transform:rotate(-7deg) translateX(-6px)}to{transform:rotate(7deg) translateX(6px)}}
+#cat.dance #head{animation:bob .45s ease-in-out infinite}
+#cat.dance #tail{animation:wag .45s ease-in-out infinite}
+#cat.shake{animation:shake .11s linear infinite}
+@keyframes shake{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+#cat.dizzy #head{animation:wobble .45s ease-in-out infinite}
+@keyframes wobble{0%,100%{transform:rotate(-9deg) translateX(-4px)}50%{transform:rotate(9deg) translateX(4px)}}
+#cat.air #ears{transform:translateY(10px)}
+#cat.air #tail{animation:none;transform:rotate(-30deg)}
+#cat.shy #head{animation:tilt .5s ease-in-out infinite alternate}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&family=Nunito:wght@700&display=swap">
 <audio id="silent" loop playsinline preload="auto" src="data:audio/wav;base64,UklGRsQPAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YaAPAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA"></audio>
 <div id="app">
-<header><div>🐾 Bigode</div><div id="mood">toque no gato!</div></header>
+<header>
+  <div id="hrow"><div>🐾 Bigode</div><div id="mood">toque no gato!</div></div>
+  <div id="meter"><i></i></div>
+</header>
 <div id="stage">
   <div id="bubble"></div>
   <div id="fx"></div>
   <div id="item"></div>
+  <div id="goal">🥅</div>
+  <div id="tramp"><div class="mat"></div><div class="leg l"></div><div class="leg r"></div></div>
+  <div id="ball">⚽</div>
+  <div id="catbox"><div id="catwrap">
   <svg id="cat" class="idle" viewBox="0 0 300 330" xmlns="http://www.w3.org/2000/svg" aria-label="Gato Bigode">
     <g id="tail" class="g" data-part="tail"><path d="M205 265 C 270 270, 285 220, 262 185 C 250 170, 232 175, 236 192 C 242 210, 250 240, 205 250 Z" fill="var(--fur)"/>
       <path d="M248 182 c-6 6 -7 16 -2 24" stroke="var(--fur2)" stroke-width="6" fill="none" stroke-linecap="round"/></g>
@@ -116,39 +165,56 @@ header{display:flex;justify-content:space-between;align-items:center;gap:8px;fon
       <ellipse cx="150" cy="130" rx="92" ry="78" fill="var(--fur)"/>
       <path d="M118 62 l10 20 l10 -20 l10 20 l10 -20" stroke="var(--fur2)" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
       <ellipse cx="150" cy="160" rx="58" ry="40" fill="var(--cream)"/>
+      <g id="blush" fill="var(--pink)" opacity=".7"><ellipse cx="88" cy="150" rx="14" ry="8"/><ellipse cx="212" cy="150" rx="14" ry="8"/></g>
       <g data-part="eye"><ellipse cx="114" cy="122" rx="20" ry="24" fill="#fff"/><circle cx="117" cy="126" r="12" fill="#2b3a4a"/><circle cx="122" cy="120" r="4" fill="#fff"/>
         <ellipse class="eye-lid" cx="114" cy="122" rx="21" ry="25" fill="var(--fur)"/></g>
       <g data-part="eye"><ellipse cx="186" cy="122" rx="20" ry="24" fill="#fff"/><circle cx="183" cy="126" r="12" fill="#2b3a4a"/><circle cx="188" cy="120" r="4" fill="#fff"/>
         <ellipse class="eye-lid" cx="186" cy="122" rx="21" ry="25" fill="var(--fur)"/></g>
+      <g id="eyes-x" stroke="#4a2a12" stroke-width="6" stroke-linecap="round" fill="none"><path d="M102 110 l24 24 M126 110 l-24 24"/><path d="M174 110 l24 24 M198 110 l-24 24"/></g>
       <path id="nose" data-part="nose" d="M140 150 h20 l-10 12 Z" fill="var(--pink)"/>
       <g stroke="var(--fur2)" stroke-width="3" stroke-linecap="round"><path d="M60 148 l45 8"/><path d="M58 164 l47 0"/><path d="M240 148 l-45 8"/><path d="M242 164 l-47 0"/></g>
       <path id="mouth-smile" d="M132 168 q18 18 36 0" stroke="#4a2a12" stroke-width="4" fill="none" stroke-linecap="round"/>
       <path id="mouth-open" d="M128 166 q22 34 44 0 Z" fill="#8c2f3a"/>
       <path id="mouth-flat" d="M136 172 h28" stroke="#4a2a12" stroke-width="4" stroke-linecap="round"/>
       <ellipse id="mouth-ooh" cx="150" cy="176" rx="10" ry="13" fill="#8c2f3a"/>
+      <path id="stache" d="M130 165 q20 -12 40 0 q-20 7 -40 0 Z" fill="#fff" stroke="#e8e0d0" stroke-width="1"/>
     </g>
   </svg>
+  </div></div>
 </div>
-<div id="bar">
+<div id="bar-home" class="bar">
   <button id="b-food"><span>🐟</span><b>Comer</b></button>
-  <button id="b-play"><span>🧶</span><b>Brincar</b></button>
+  <button id="b-milk"><span>🥛</span><b>Leite</b></button>
+  <button id="b-bath"><span>🛁</span><b>Banho</b></button>
+  <button id="b-dance"><span>🎶</span><b>Dançar</b></button>
   <button id="b-sleep"><span>💤</span><b>Dormir</b></button>
-  <button id="b-meow"><span>🎵</span><b>Miau</b></button>
+  <button id="b-tramp"><span>🤸</span><b>Pula-pula</b></button>
+  <button id="b-goal"><span>⚽</span><b>Gol</b></button>
   <button id="b-mic"><span>🎤</span><b>Falar</b></button>
+</div>
+<div id="bar-game" class="bar" hidden>
+  <button id="b-back"><span>⬅️</span><b>Voltar</b></button>
+  <div id="score" class="pill">Pulos: 0</div>
 </div>
 </div>
 <script>
 (function(){
+'use strict';
 const $=function(id){return document.getElementById(id)};
-const cat=$('cat'),bubble=$('bubble'),mood=$('mood'),fx=$('fx'),item=$('item'),stage=$('stage'),micBtn=$('b-mic'),micLabel=micBtn.querySelector('b'),silent=$('silent');
+const app=$('app'),cat=$('cat'),catbox=$('catbox'),catwrap=$('catwrap'),bubble=$('bubble'),mood=$('mood'),fx=$('fx'),item=$('item'),stage=$('stage'),
+  micBtn=$('b-mic'),micLabel=micBtn.querySelector('b'),silent=$('silent'),meter=$('meter'),meterBar=meter.firstElementChild,
+  trampEl=$('tramp'),goalEl=$('goal'),ballEl=$('ball'),barHome=$('bar-home'),barGame=$('bar-game'),scoreEl=$('score');
 const isIOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-let ac=null,master=null,busy=false,sleeping=false,timer=null,quietUntil=0,wl=null;
-let stream=null,msrc=null,proc=null,mute=null,listening=false,playing=false,rec=null,pre=[],speech=0,silence=0,voiced=0,floor=0.01;
+let ac=null,master=null,noiseBuf=null,quietUntil=0,wl=null;
+let busy=false,sleeping=false,timer=null,mode='home',game=null,extraT=null;
+let stream=null,msrc=null,proc=null,mute=null,listening=false,playing=false,rec=null,pre=[],speech=0,silence=0,voiced=0,floor=0.01,manual=false,lastMeter=0;
 
-/* ---------- audio core: unlock on gesture END (iOS), ignore the silent switch ---------- */
+/* ================= audio core ================= */
 function buildCtx(){ try{ const C=window.AudioContext||window.webkitAudioContext; if(!C)return null; const c=new C();
   const g=c.createGain(); g.gain.value=1; const comp=c.createDynamicsCompressor(); comp.threshold.value=-10; comp.ratio.value=6;
-  g.connect(comp); comp.connect(c.destination); ac=c; master=g; }catch(e){ ac=null; } return ac; }
+  g.connect(comp); comp.connect(c.destination);
+  const nb=c.createBuffer(1,c.sampleRate,c.sampleRate); const d=nb.getChannelData(0); for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  ac=c; master=g; noiseBuf=nb; }catch(e){ ac=null; } return ac; }
 function audio(){ if(!ac)buildCtx(); if(ac&&ac.state!=='running'){ try{ ac.resume().catch(function(){}); }catch(e){} } return ac; }
 function setSession(t){ try{ if(navigator.audioSession) navigator.audioSession.type=t; }catch(e){} }
 function unlock(){ const a=audio(); if(!a)return;
@@ -158,83 +224,179 @@ function unlock(){ const a=audio(); if(!a)return;
   if(!wl&&navigator.wakeLock){ try{ navigator.wakeLock.request('screen').then(function(l){ wl=l; l.addEventListener('release',function(){wl=null;}); }).catch(function(){}); }catch(e){} }
 }
 ['pointerup','touchend','click','keyup'].forEach(function(t){ document.addEventListener(t,unlock,{passive:true}); });
-
-function tone(f1,f2,dur,type,vol,delay){ const a=audio(); if(!a)return; const d=delay||0,t=a.currentTime+d;
-  try{ const o=a.createOscillator(),g=a.createGain(); o.type=type||'triangle';
-    o.frequency.setValueAtTime(f1,t); o.frequency.exponentialRampToValueAtTime(f2,t+dur);
-    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol||.4,t+.03); g.gain.exponentialRampToValueAtTime(.001,t+dur);
-    o.connect(g); g.connect(master); o.start(t); o.stop(t+dur+.05); }catch(e){}
-  quietUntil=Math.max(quietUntil,performance.now()+(d+dur)*1000+350); }
+function quiet(d,dur){ quietUntil=Math.max(quietUntil,performance.now()+((d||0)+dur)*1000+350); }
+function tone(f1,f2,dur,type,vol,delay,o){ o=o||{}; const a=audio(); if(!a)return; const d=delay||0,t=a.currentTime+d;
+  try{ const osc=a.createOscillator(),g=a.createGain(); osc.type=type||'triangle';
+    osc.frequency.setValueAtTime(f1,t); osc.frequency.exponentialRampToValueAtTime(f2,t+dur);
+    let last=osc; if(o.lp){ const f=a.createBiquadFilter(); f.type='lowpass'; f.frequency.value=o.lp; osc.connect(f); last=f; }
+    if(o.vib){ const l=a.createOscillator(),lg=a.createGain(); l.frequency.value=o.vib; lg.gain.value=o.depth||20; l.connect(lg); lg.connect(osc.frequency); l.start(t); l.stop(t+dur+.05); }
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol||.4,t+(o.attack||.03)); g.gain.exponentialRampToValueAtTime(.001,t+dur);
+    last.connect(g); g.connect(master); osc.start(t); osc.stop(t+dur+.05); }catch(e){}
+  quiet(d,dur); }
+function noise(dur,vol,delay,type,f1,f2,attack){ const a=audio(); if(!a)return; const d=delay||0,t=a.currentTime+d;
+  try{ const s=a.createBufferSource(); s.buffer=noiseBuf; s.loop=true; const f=a.createBiquadFilter(); f.type=type||'lowpass'; f.Q.value=1.2;
+    f.frequency.setValueAtTime(f1||1000,t); if(f2)f.frequency.exponentialRampToValueAtTime(f2,t+dur);
+    const g=a.createGain(); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+(attack||.01)); g.gain.exponentialRampToValueAtTime(.001,t+dur);
+    s.connect(f); f.connect(g); g.connect(master); s.start(t); s.stop(t+dur+.05); }catch(e){}
+  quiet(d,dur); }
+const NOTE={C:523.25,D:587.33,E:659.25,F:698.46,G:783.99,A:880,c:1046.5};
 const snd={
-  meow:function(){ tone(520,780,.18,'sawtooth',.35); tone(780,420,.45,'sawtooth',.35,.18); },
-  purr:function(){ for(let i=0;i<10;i++)tone(60,55,.08,'square',.2,i*.09); },
+  meow:function(){ tone(520,800,.16,'sawtooth',.3,0,{lp:2200,vib:6,depth:12}); tone(800,430,.42,'sawtooth',.3,.16,{lp:2000,vib:6,depth:15}); },
+  mew:function(){ tone(700,1000,.1,'sawtooth',.28,0,{lp:2600}); tone(1000,650,.22,'sawtooth',.28,.1,{lp:2400,vib:7,depth:18}); },
+  angry:function(){ tone(300,950,.14,'square',.3,0,{lp:1800}); tone(950,260,.45,'sawtooth',.4,.14,{lp:1600,vib:9,depth:30}); },
+  purr:function(){ for(let i=0;i<24;i++)tone(58,50,.035,'square',.18,i*.042,{lp:400}); },
   giggle:function(){ for(let i=0;i<5;i++)tone(600+i*40,900+i*40,.1,'triangle',.4,i*.13); },
-  ouch:function(){ tone(900,300,.3,'sawtooth',.45); },
-  chomp:function(){ for(let i=0;i<4;i++)tone(200,120,.08,'square',.3,i*.25); },
-  sneeze:function(){ tone(300,900,.15,'sawtooth',.4); tone(700,200,.3,'sawtooth',.45,.15); },
-  snore:function(){ tone(90,140,.6,'sine',.35); tone(140,80,.6,'sine',.25,.7); },
-  boing:function(){ tone(300,700,.25,'triangle',.4); },
-  burp:function(){ tone(150,90,.35,'sawtooth',.45); }
+  ouch:function(){ tone(900,300,.3,'sawtooth',.45,0,{lp:2500}); },
+  chomp:function(){ for(let i=0;i<4;i++){ tone(200,120,.08,'square',.3,i*.25,{lp:900}); noise(.06,.25,i*.25,'lowpass',900); } },
+  crunch:function(){ for(let i=0;i<4;i++)noise(.09,.5,i*.22,'highpass',1800); },
+  slurp:function(){ for(let i=0;i<3;i++){ noise(.3,.35,i*.38,'bandpass',500,2000); tone(260,760,.3,'sine',.18,i*.38); } },
+  burp:function(){ tone(160,80,.4,'sawtooth',.5,0,{vib:14,depth:20,lp:1200}); noise(.35,.25,0,'lowpass',700,300); },
+  fart:function(){ tone(95,60,.5,'sawtooth',.5,0,{vib:19,depth:28,lp:500}); noise(.5,.4,0,'lowpass',300,120); },
+  sneeze:function(){ tone(300,900,.15,'sawtooth',.4,0,{lp:2500}); tone(700,200,.3,'sawtooth',.45,.15,{lp:2000}); noise(.25,.3,.15,'highpass',2500); },
+  snore:function(){ tone(90,140,.6,'sine',.35,0,{vib:25,depth:10}); tone(140,80,.6,'sine',.25,.7); },
+  boing:function(){ tone(250,650,.22,'triangle',.5); tone(650,420,.2,'triangle',.3,.22); },
+  boing2:function(){ tone(500,1100,.18,'triangle',.45); },
+  kick:function(){ noise(.08,.6,0,'lowpass',400); tone(120,60,.12,'sine',.5); },
+  crowd:function(){ noise(1.5,.55,0,'bandpass',800,1400,.3); for(let i=0;i<6;i++)tone(400+Math.random()*300,500+Math.random()*300,.25,'triangle',.08,.2+i*.18); },
+  clank:function(){ tone(1200,1150,.25,'square',.25,0,{lp:3000}); tone(2400,2300,.15,'sine',.2); },
+  whistle:function(){ tone(2200,2600,.12,'sine',.3); tone(2600,2200,.15,'sine',.3,.14); },
+  yawn:function(){ tone(400,650,.3,'triangle',.3,0,{vib:5,depth:10}); tone(650,300,.6,'triangle',.3,.3,{vib:5,depth:10}); },
+  dizzy:function(){ tone(900,300,.7,'sine',.35,0,{vib:8,depth:60}); },
+  splash:function(){ noise(.4,.5,0,'lowpass',2500,500); for(let i=0;i<4;i++)tone(500+Math.random()*700,900+Math.random()*700,.08,'sine',.25,.1+i*.12); },
+  bubbles:function(){ for(let i=0;i<5;i++)tone(400+i*120,700+i*120,.09,'sine',.25,i*.14); },
+  shake:function(){ for(let i=0;i<6;i++)noise(.06,.3,i*.1,'bandpass',1500); },
+  sparkle:function(){ for(let i=0;i<3;i++)tone(1500+i*300,2500+i*300,.1,'sine',.2,i*.12); },
+  happy:function(){ tone(600,900,.1,'triangle',.3); tone(900,1200,.14,'triangle',.3,.1); },
+  jingle:function(){ const seq='CEGcGECEDFAFGEC_'; const step=.2; let t=0;
+    for(let r=0;r<2;r++){ for(let i=0;i<seq.length;i++){ const f=NOTE[seq[i]]; if(f){ tone(f,f,.17,'square',.12,t,{attack:.01,lp:3000}); tone(f,f,.18,'triangle',.22,t); } if(i%4===0)tone(f?f/4:130,f?f/4:130,.3,'triangle',.22,t); t+=step; } }
+    return t; }
 };
 
-/* ---------- cat behaviour ---------- */
+/* ================= cat behaviour ================= */
 function say(txt,ms){ bubble.textContent=txt; bubble.classList.add('on'); clearTimeout(bubble._t); bubble._t=setTimeout(function(){bubble.classList.remove('on')},ms||1200); }
-function spawn(emoji,x,y,n){ for(let i=0;i<(n||1);i++){ const e=document.createElement('div'); e.className='fx'; e.textContent=emoji;
-  e.style.left=(x+(Math.random()*80-40))+'px'; e.style.top=(y+(Math.random()*30-15))+'px'; fx.appendChild(e); setTimeout(function(){e.remove()},1200);} }
+function srect(){ return stage.getBoundingClientRect(); }
+function spawn(emoji,x,y,n,slow){ for(let i=0;i<(n||1);i++){ const e=document.createElement('div'); e.className='fx'+(slow?' slow':''); e.textContent=emoji;
+  e.style.left=(x+(Math.random()*90-45))+'px'; e.style.top=(y+(Math.random()*40-20))+'px'; fx.appendChild(e); setTimeout(function(){e.remove()},slow?2300:1200);} }
+function spawnMid(emoji,n,slow){ const r=srect(); spawn(emoji,r.width/2,r.height*.35,n,slow); }
+function setCls(c){ cat.setAttribute('class',c); }
+function getCls(){ return cat.getAttribute('class')||''; }
 function restState(){ return sleeping?'sleep':'idle'; }
-function setState(s,ms,done){ busy=true; cat.className=s; clearTimeout(timer); timer=setTimeout(function(){ cat.className=restState(); busy=false; if(done)done(); },ms); }
-function wake(){ if(sleeping){ sleeping=false; cat.className='idle'; mood.textContent='acordei!'; say('Hmm?! 😾',900); snd.meow(); return true;} return false; }
+function setState(s,ms,done){ busy=true; setCls(s); clearTimeout(timer); clearTimeout(extraT); timer=setTimeout(function(){ setCls(restState()); busy=false; if(done)done(); },ms); }
+function wake(){ if(sleeping){ sleeping=false; setCls('idle'); mood.textContent='acordei!'; say('Hmm?! 😾',900); snd.meow(); return true;} return false; }
+let bellyTaps=[],down=null;
 const reactions={
   head:function(){ say('Prrrr… 😽'); mood.textContent='amando carinho'; snd.purr(); setState('happy',1300); },
   belly:function(){ say('Hahaha! 🤣'); mood.textContent='cócegas!'; snd.giggle(); setState('laugh',1100); },
+  pum:function(){ say('PUM! 🙈'); mood.textContent='ops…'; snd.fart(); spawnMid('💨',3,true); setState('shy',1400,function(){ snd.giggle(); setState('laugh',700); }); },
   paw:function(){ say('Hihihi! 😹'); mood.textContent='cócegas no pé'; snd.giggle(); setState('laugh',800); },
-  tail:function(){ say('MIAAAU! 😾'); mood.textContent='ai, meu rabo!'; snd.ouch(); setState('ouch',900); },
+  tail:function(){ say('MIAAAU! 😾'); mood.textContent='ai, meu rabo!'; snd.angry(); setState('ouch',900); },
   nose:function(){ say('A-a-ATCHIM! 🤧'); mood.textContent='espirrou'; snd.sneeze(); setState('sneeze',700); },
-  eye:function(){ say('Ei, meu olho! 🙀'); mood.textContent='pisca pisca'; snd.ouch(); setState('ouch',800); }
+  eye:function(){ say('Ei, meu olho! 🙀'); mood.textContent='pisca pisca'; snd.ouch(); setState('ouch',800); },
+  slap:function(){ say('Ai! 😵'); mood.textContent='tonto…'; snd.ouch(); snd.dizzy(); spawnMid('💫',3); setState('dizzy',1500); }
 };
-function hit(ev){ if(ev.pointerType==='mouse'&&ev.button!==0)return; ev.preventDefault(); audio();
-  const el=document.elementFromPoint(ev.clientX,ev.clientY); const part=el&&el.closest('[data-part]'); if(!part)return;
-  if(wake())return; if(busy)return; const r=stage.getBoundingClientRect(); const p=part.getAttribute('data-part');
-  spawn(p==='tail'||p==='eye'?'💢':'💛',ev.clientX-r.left,ev.clientY-r.top,2); (reactions[p]||reactions.head)(); }
-cat.addEventListener('pointerdown',hit);
+function react(p,x,y){ if(wake())return; const r=srect();
+  if(p==='belly'){ const now=performance.now(); bellyTaps=bellyTaps.filter(function(t){return now-t<1100}); bellyTaps.push(now);
+    if(bellyTaps.length>=3){ bellyTaps=[]; spawn('💨',x-r.left,y-r.top,2); reactions.pum(); return; } }
+  if(busy)return; spawn(p==='tail'||p==='eye'||p==='slap'?'💢':'💛',x-r.left,y-r.top,2); (reactions[p]||reactions.head)(); }
+function catDown(ev){ if(ev.pointerType==='mouse'&&ev.button!==0)return; ev.preventDefault(); audio();
+  if(mode==='tramp'){ trampTap(); return; } if(mode==='goal')return;
+  const part=ev.target&&ev.target.closest?ev.target.closest('[data-part]'):null; if(!part)return;
+  try{ if(cat.setPointerCapture)cat.setPointerCapture(ev.pointerId); }catch(e){}
+  down={x:ev.clientX,y:ev.clientY,t:performance.now(),part:part.getAttribute('data-part'),done:false}; }
+function catMove(ev){ if(!down||down.done)return; const dx=ev.clientX-down.x,dy=ev.clientY-down.y; const dist=Math.sqrt(dx*dx+dy*dy);
+  if(dist>70&&performance.now()-down.t<260&&(down.part==='head'||down.part==='eye'||down.part==='nose')){ down.done=true; react('slap',ev.clientX,ev.clientY); } }
+function catUp(ev){ if(!down)return; const d=down; down=null; if(d.done)return; react(d.part,d.x,d.y); }
+cat.addEventListener('pointerdown',catDown); cat.addEventListener('pointermove',catMove); cat.addEventListener('pointerup',catUp); cat.addEventListener('pointercancel',function(){down=null});
 stage.addEventListener('touchstart',function(e){e.preventDefault()},{passive:false});
+stage.addEventListener('pointerdown',function(ev){ if(mode==='tramp'&&ev.target!==cat&&!cat.contains(ev.target)){ audio(); trampTap(); } });
 
+/* ================= actions ================= */
 function showItem(emoji,ms){ item.textContent=emoji; item.style.display='block'; setTimeout(function(){item.style.display='none'},ms); }
-$('b-food').onclick=function(){ audio(); if(wake()||busy)return; mood.textContent='nham nham'; showItem('🐟',1500); snd.chomp();
-  setState('eat',1500,function(){ say('BURP! 😸'); snd.burp(); const r=stage.getBoundingClientRect(); spawn('✨',r.width/2,r.height*.35,3); mood.textContent='satisfeito'; }); };
-$('b-play').onclick=function(){ audio(); if(wake()||busy)return; mood.textContent='brincando'; showItem('🧶',1200); snd.boing(); say('Iuhuu! 😸'); setState('laugh',1200); };
-$('b-sleep').onclick=function(){ audio(); if(sleeping){wake();return;} if(busy)return; sleeping=true; busy=false; rec=null; cat.className='sleep'; mood.textContent='dormindo… toque para acordar'; say('Zzz… 💤',2500); snd.snore(); };
-$('b-meow').onclick=function(){ audio(); if(wake()||busy)return; say('MIAU! 🎵'); mood.textContent='cantando'; snd.meow(); setState('laugh',600); };
+const foods=[['🐟','chomp'],['🍎','crunch'],['🧁','chomp'],['🍕','chomp'],['🍪','crunch']]; let foodI=0;
+$('b-food').onclick=function(){ audio(); if(wake()||busy)return; const f=foods[foodI++%foods.length]; mood.textContent='nham nham'; showItem(f[0],1500); snd[f[1]]();
+  setState('eat',1500,function(){ if(Math.random()<.5){ say('BURP! 😸'); snd.burp(); } else { say('Hmmm! 😋'); snd.happy(); } spawnMid('✨',3); mood.textContent='satisfeito'; }); };
+$('b-milk').onclick=function(){ audio(); if(wake()||busy)return; mood.textContent='glup glup'; showItem('🥛',1700); snd.slurp();
+  setState('milk',1700,function(){ say('Ahhh! 🥛'); snd.happy(); cat.classList.add('stache'); extraT=setTimeout(function(){cat.classList.remove('stache')},2500); mood.textContent='bigode de leite'; }); };
+$('b-bath').onclick=function(){ audio(); if(wake()||busy)return; mood.textContent='banho!'; showItem('🛁',2300); snd.splash(); say('Splash! 🫧');
+  let n=0; const bub=setInterval(function(){ spawnMid('🫧',2,true); snd.bubbles(); if(++n>=4)clearInterval(bub); },500);
+  setState('happy',2300,function(){ snd.shake(); spawnMid('💧',5); setState('shake',800,function(){ say('Limpinho! ✨'); snd.sparkle(); spawnMid('✨',4); mood.textContent='cheiroso'; }); }); };
+$('b-dance').onclick=function(){ audio(); if(wake()||busy)return; mood.textContent='dançando'; say('Lá lá lá! 🎶'); const dur=snd.jingle();
+  let n=0; const notes=setInterval(function(){ spawnMid(['🎵','🎶'][n%2],1); if(++n*0.45>dur)clearInterval(notes); },450);
+  setState('dance',dur*1000,function(){ snd.meow(); mood.textContent='ufa!'; }); };
+$('b-sleep').onclick=function(){ audio(); if(sleeping){wake();return;} if(busy)return; sleeping=true; busy=false; rec=null; setCls('sleep'); mood.textContent='dormindo… toque para acordar'; say('Zzz… 💤',2500); snd.snore(); };
 
-/* ---------- microphone: listen, record while you talk, repeat in a squeaky voice ---------- */
+/* ================= mini games ================= */
+function enterGame(type){ audio(); wake(); if(busy)return; mode=type; app.className=type; barHome.hidden=true; barGame.hidden=false; clearTimeout(timer); busy=false; setCls('idle'); item.style.display='none';
+  game={type:type,ty:0,vy:0,jumps:0,boosted:false,score:0,flying:false,last:performance.now(),raf:0};
+  if(type==='tramp'){ trampEl.style.display='block'; catbox.style.transform='translateY(-62px) scale(.82)'; scoreEl.textContent='Pulos: 0'; mood.textContent='toque para pular!'; say('Pula! 🤸'); game.raf=requestAnimationFrame(loop); }
+  else { goalEl.style.display='block'; ballEl.style.display='block'; catbox.classList.add('goalpos'); scoreEl.textContent='Gols: 0'; mood.textContent='toque na bola!'; say('Chuta! ⚽'); } }
+function leaveGame(){ if(game&&game.raf)cancelAnimationFrame(game.raf); game=null; mode='home'; app.className=''; barHome.hidden=false; barGame.hidden=true;
+  trampEl.style.display='none'; goalEl.style.display='none'; ballEl.style.display='none'; ballEl.style.transform=''; catbox.style.transform=''; catbox.classList.remove('goalpos'); catwrap.classList.remove('hop'); setCls(restState()); mood.textContent='toque no gato!'; }
+function squash(){ trampEl.classList.remove('squash'); void trampEl.offsetWidth; trampEl.classList.add('squash'); }
+function trampTap(){ const g=game; if(!g)return;
+  if(g.ty<8){ g.vy=1150; g.boosted=false; g.jumps++; snd.boing(); squash(); }
+  else if(!g.boosted&&g.vy>0){ g.vy+=380; g.boosted=true; snd.boing2(); spawnMid('✨',2); }
+  scoreEl.textContent='Pulos: '+g.jumps; }
+function loop(now){ const g=game; if(!g||g.type!=='tramp')return; const dt=Math.min(.04,(now-g.last)/1000); g.last=now;
+  if(g.ty>0||g.vy>0){ g.vy-=2400*dt; g.ty+=g.vy*dt;
+    if(g.ty<=0){ g.ty=0; if(g.vy<-350){ g.vy=-g.vy*.55; g.jumps++; snd.boing(); squash(); scoreEl.textContent='Pulos: '+g.jumps; } else g.vy=0; g.boosted=false; } }
+  catbox.style.transform='translateY('+(-62-g.ty)+'px) scale(.82)'; const inAir=g.ty>25; if(inAir&&getCls()!=='air')setCls('air'); if(!inAir&&getCls()==='air')setCls('idle');
+  if(g.jumps>0&&g.jumps%10===0&&!g.cheered){ g.cheered=true; say('Uau! '+g.jumps+' pulos! 🎉'); snd.crowd(); spawnMid('🎉',4); } if(g.jumps%10!==0)g.cheered=false;
+  g.raf=requestAnimationFrame(loop); }
+function kick(ev){ if(ev)ev.preventDefault(); audio(); const g=game; if(!g||g.type!=='goal'||g.flying)return; g.flying=true; snd.kick();
+  const st=srect(),gr=goalEl.getBoundingClientRect(),br=ballEl.getBoundingClientRect();
+  const x0=br.left-st.left+br.width/2,y0=br.top-st.top+br.height/2; const goalIn=Math.random()<.75;
+  const x1=gr.left-st.left+gr.width/2+(goalIn?(Math.random()*50-25):(gr.width/2+14)*(Math.random()<.5?-1:1)); const y1=gr.top-st.top+gr.height*.6;
+  const T=720,t0=performance.now();
+  setTimeout(function(){ catwrap.classList.remove('hop'); void catwrap.offsetWidth; catwrap.classList.add('hop'); setCls('air'); snd.mew(); },T*.35);
+  function anim(now){ const p=Math.min(1,(now-t0)/T); const x=x0+(x1-x0)*p,y=y0+(y1-y0)*p-Math.sin(p*Math.PI)*110;
+    ballEl.style.transform='translate('+(x-x0)+'px,'+(y-y0)+'px) rotate('+(p*720)+'deg)'; if(p<1)requestAnimationFrame(anim); else land(); }
+  function land(){ if(goalIn){ g.score++; scoreEl.textContent='Gols: '+g.score; say('GOOOL! ⚽',1500); snd.crowd(); snd.whistle(); spawn('🎉',x1,y1+40,5); setCls('laugh'); }
+    else { say('Na trave! 😅'); snd.clank(); setCls('ouch'); }
+    setTimeout(function(){ ballEl.style.transform=''; g.flying=false; if(game)setCls('idle'); },1000); }
+  requestAnimationFrame(anim); }
+$('b-tramp').onclick=function(){ enterGame('tramp'); };
+$('b-goal').onclick=function(){ enterGame('goal'); };
+$('b-back').onclick=function(){ audio(); leaveGame(); };
+ballEl.addEventListener('pointerdown',kick);
+
+/* ================= microphone: auto-listen or hold-to-talk, repeat in a squeaky voice ================= */
 function noMic(msg){ say('Sem microfone 🙈',1600); mood.textContent=msg; }
-function freshCtx(){ try{ if(ac){ const old=ac; ac=null; old.close().catch(function(){}); } }catch(e){} buildCtx(); audio(); }
 async function micToggle(){
   if(stream){ micOff(); return; }
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ noMic('microfone indisponível'); return; }
+  audio();
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ noMic('abra o link no Safari ou Chrome'); return; }
   micBtn.classList.add('wait'); mood.textContent='pedindo o microfone…';
+  setSession('play-and-record');
   let s;
   try{ s=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false}); }
-  catch(e){ micBtn.classList.remove('wait'); noMic(e&&e.name==='NotAllowedError'?'microfone não liberado':'microfone indisponível'); return; }
-  stream=s; freshCtx(); setSession('play-and-record');
+  catch(e){ micBtn.classList.remove('wait'); setSession('playback'); noMic(e&&e.name==='NotAllowedError'?'microfone não liberado':'microfone indisponível'); return; }
+  stream=s; audio();
   try{
     msrc=ac.createMediaStreamSource(stream); proc=ac.createScriptProcessor(2048,1,1); mute=ac.createGain(); mute.gain.value=0;
     msrc.connect(proc); proc.connect(mute); mute.connect(ac.destination); proc.onaudioprocess=onAudio;
   }catch(e){ micBtn.classList.remove('wait'); micOff(); noMic('microfone indisponível'); return; }
-  listening=true; pre=[]; floor=0.01; micBtn.classList.remove('wait'); micBtn.classList.add('on'); micLabel.textContent='Ouvindo';
-  mood.textContent='fale com o Bigode!'; say('Fala comigo! 🎤',1500); snd.meow();
+  listening=true; pre=[]; floor=0.01; micBtn.classList.remove('wait'); micBtn.classList.add('on'); micLabel.textContent='Ouvindo'; meter.classList.add('on');
+  mood.textContent='fale com o Bigode!'; say('Fala comigo! 🎤',1500); snd.mew();
+  setTimeout(function(){ if(stream&&ac&&ac.state!=='running'){ audio(); mood.textContent='toque no gato para ligar o som'; } },400);
 }
-function micOff(){ listening=false; rec=null;
+function micOff(){ listening=false; manual=false; rec=null;
   try{ stream.getTracks().forEach(function(t){t.stop()}); }catch(e){} stream=null;
   try{ proc.disconnect(); msrc.disconnect(); mute.disconnect(); }catch(e){} proc=msrc=mute=null;
-  freshCtx(); setSession('playback');
-  micBtn.classList.remove('on','wait'); micLabel.textContent='Falar'; cat.classList.remove('listen'); mood.textContent='toque no gato!'; }
-micBtn.onclick=function(){ micToggle(); };
-
+  setSession('playback'); meter.classList.remove('on'); meterBar.style.transform='scaleX(0)';
+  micBtn.classList.remove('on','wait','rec'); micLabel.textContent='Falar'; cat.classList.remove('listen'); mood.textContent='toque no gato!'; }
+let holdT=null,held=false;
+micBtn.addEventListener('pointerdown',function(ev){ if(ev.pointerType==='mouse'&&ev.button!==0)return; held=false; clearTimeout(holdT);
+  if(!stream)return; holdT=setTimeout(function(){ held=true; manual=true; rec=[]; voiced=0; micBtn.classList.add('rec'); cat.classList.add('listen'); mood.textContent='pode falar…'; },350); });
+function holdEnd(){ clearTimeout(holdT); if(manual){ manual=false; micBtn.classList.remove('rec'); if(rec&&rec.length)finish(true); else { rec=null; cat.classList.remove('listen'); } } }
+micBtn.addEventListener('pointerup',holdEnd); micBtn.addEventListener('pointercancel',holdEnd); micBtn.addEventListener('pointerleave',holdEnd);
+micBtn.addEventListener('click',function(){ if(held){ held=false; return; } micToggle(); });
 function onAudio(e){
   const d=e.inputBuffer.getChannelData(0); let s=0; for(let i=0;i<d.length;i+=4)s+=d[i]*d[i]; const rms=Math.sqrt(s/(d.length/4));
-  if(!listening||playing||sleeping||performance.now()<quietUntil){ if(rec){ rec=null; cat.classList.remove('listen'); } speech=0; return; }
-  const thr=Math.max(0.02,floor*3);
+  const now=performance.now(); if(now-lastMeter>60){ lastMeter=now; meterBar.style.transform='scaleX('+Math.min(1,rms*5)+')'; }
+  if(manual){ if(rec){ rec.push(new Float32Array(d)); voiced++; } return; }
+  if(!listening||playing||sleeping||now<quietUntil){ if(rec){ rec=null; cat.classList.remove('listen'); } speech=0; return; }
+  const thr=Math.max(0.015,floor*2.5);
   if(!rec){
     pre.push(new Float32Array(d)); if(pre.length>3)pre.shift();
     if(rms>thr){ speech++; if(speech>=2){ rec=pre.slice(); pre=[]; silence=0; voiced=speech; cat.classList.add('listen'); mood.textContent='ouvindo você…'; } }
@@ -242,11 +404,11 @@ function onAudio(e){
   } else {
     rec.push(new Float32Array(d));
     if(rms<thr*0.6){ silence++; } else { silence=0; voiced++; }
-    if(silence>=16) finish(false); else if(rec.length>=160) finish(true);
+    if(silence>=16) finish(false); else if(rec.length>=180) finish(true);
   }
 }
 function finish(byMax){ const chunks=rec; rec=null; speech=0; silence=0; cat.classList.remove('listen');
-  if(voiced<5){ mood.textContent='fale com o Bigode!'; return; }
+  if(!chunks||voiced<4){ mood.textContent='fale com o Bigode!'; return; }
   const keep=byMax?chunks.length:Math.max(4,chunks.length-12);
   let len=0; for(let i=0;i<keep;i++)len+=chunks[i].length;
   let buf; try{ buf=ac.createBuffer(1,len,ac.sampleRate); }catch(e){ return; }
@@ -256,18 +418,18 @@ function finish(byMax){ const chunks=rec; rec=null; speech=0; silence=0; cat.cla
   playBack(buf);
 }
 function playBack(buf){ audio(); let src; try{ src=ac.createBufferSource(); src.buffer=buf; src.playbackRate.value=1.5;
-    const g=ac.createGain(); g.gain.value=1.2; src.connect(g); g.connect(master); src.start(); }catch(e){ return; }
-  playing=true; busy=true; clearTimeout(timer); cat.className='talk'; mood.textContent='repetindo! 😸';
-  const r=stage.getBoundingClientRect(); spawn('🎶',r.width/2,r.height*.3,3);
+    const g=ac.createGain(); g.gain.value=1.3; src.connect(g); g.connect(master); src.start(); }catch(e){ return; }
+  playing=true; busy=true; clearTimeout(timer); setCls('talk'); mood.textContent='repetindo! 😸'; spawnMid('🎶',3);
   const dur=buf.duration/1.5; let ended=false;
-  function done(){ if(ended)return; ended=true; playing=false; busy=false; cat.className=restState(); quietUntil=performance.now()+500; mood.textContent='fale com o Bigode!'; }
+  function done(){ if(ended)return; ended=true; playing=false; busy=false; setCls(restState()); quietUntil=performance.now()+500; mood.textContent='fale com o Bigode!'; }
   src.onended=done; setTimeout(done,dur*1000+250);
 }
 
-/* ---------- idle life: blink, snore while asleep, occasional meow ---------- */
-setInterval(function(){ if(sleeping){ snd.snore(); const s=stage.getBoundingClientRect(); spawn('💤',s.width*.6,s.height*.3,1); return;}
+/* ================= idle life ================= */
+setInterval(function(){ if(sleeping){ snd.snore(); const s=srect(); spawn('💤',s.width*.6,s.height*.3,1,true); return;}
   if(!busy){ cat.classList.add('blink'); setTimeout(function(){cat.classList.remove('blink')},150);} },2800);
-setInterval(function(){ if(!busy&&!sleeping&&!rec&&Math.random()<.35){ say('Miau? 🐾',900); snd.meow(); } },9000);
+setInterval(function(){ if(busy||sleeping||rec||mode!=='home')return; const r=Math.random();
+  if(r<.3){ say('Miau? 🐾',900); snd.meow(); } else if(r<.45){ say('Aaaah… 🥱',900); snd.yawn(); setState('yawn',900); } },9000);
 })();
 </script>
 
